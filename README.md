@@ -4,31 +4,30 @@
 
 ## 👤 Informação do Aluno
 **Nome:** Leandro Maximiano Teixeira Pereira 
-**Número:** [Número de Aluno]  
+**Número:** 8  
 **Curso:** Profissional de Informática - Sistemas
 **Ano Letivo:** 2025/2026 
 **Orientador:** [Nome do Professor Orientador]
 
 ## 📋 Descrição do Projeto
-[Descreve brevemente o teu projeto em 2-3 frases. Exemplo:]  
-Sistema de gestão de biblioteca online que permite aos utilizadores pesquisar livros, fazer reservas e gerir o seu perfil de leitor.
+Aplicação Web que permite aos utilizadores fazer listagens de animais para adoção, ver diferentes listagens, comunicarem-se com outros criadores de listagens e etc...
 
 ## 🎯 Objetivos Principais
-- [ ] Desenvolver um site dinâmico com base de dados
-- [ ] Implementar sistema de autenticação de utilizadores
-- [ ] Criar interface responsiva e intuitiva
+- [X] Desenvolver um site dinâmico com base de dados
+- [X] Implementar sistema de autenticação de utilizadores
+- [X] Criar interface responsiva e intuitiva
 - [ ] Implementar funcionalidade CRUD completa
 - [ ] Fazer deploy da aplicação
 
 ## 🛠️ Stack Tecnológica
 
 ### **Frontend**
-- [ ] HTML5, CSS3, JavaScript
+- [X] HTML5, CSS3, JavaScript
 - [ ] Bootstrap/Tailwind CSS [ou outro framework]
 - [ ] React/Vue.js [opcional]
 
 ### **Backend**
-- [ ] Node.js/PHP/Python [escolher um]
+- [X] PHP
 - [ ] Express/Laravel/Django [framework]
 - [ ] Autenticação JWT/Sessions
 
@@ -37,7 +36,7 @@ Sistema de gestão de biblioteca online que permite aos utilizadores pesquisar l
 - [ ] ORM: Sequelize/Eloquent [conforme backend]
 
 ### **Outras Ferramentas**
-- [ ] Git & GitHub
+- [X] Git & GitHub
 - [ ] Docker [opcional]
 - [ ] VSCode
 
@@ -47,47 +46,28 @@ Sistema de gestão de biblioteca online que permite aos utilizadores pesquisar l
 ## 📊 *Funcionalidades Implementadas*
 
 ### ✅ Concluídas
-- Sistema de registo e login
-- Página inicial com listagem
-- Perfil de utilizador
-...
 
 ### 🔄 Em Desenvolvimento
-- Funcionalidade de pesquisa
-- Upload de ficheiros
-...
 
 ### 📅 Planeadas
-- API REST
-- PWA
-...
 
 ## 🗓️ Plano de Trabalho
 Fase	Tarefas	Prazo	Estado
-1	Planeamento e setup	DD/MM	✅
-2	Desenvolvimento backend	DD/MM	🟡
-3	Desenvolvimento frontend	DD/MM	🔴
-4	Testes e deploy	DD/MM	🔴
+1	Planeamento e setup 🔴
+2	Desenvolvimento backend	🔴
+3	Desenvolvimento frontend 🔴
+4	Testes e deploy 🔴
 
 ## 📝 Relatório de Progresso
-Última Atualização: [Data]
+Última Atualização: 
 O que foi feito desde a última atualização:
-- Implementada a funcionalidade X
-- Corrigido bug Y
-- Melhorado o design da página Z
 
 ## Próximos passos:
-- Implementar feature A
-- Escrever testes para B
-- Otimizar performance C
 
 ## 🔗 Links Úteis
-- Documentação - Documentação detalhada
-- Trello/Planeamento - Quadro de tarefas
-- Protótipo - Design no Figma
 
 ## 📞 Contacto
-- Email: [teu.email@escola.com]
-- GitHub: [@teuusername]
+- Email: a10961@agrcanelas.com
+- GitHub: LeandroPereira25
 
 
