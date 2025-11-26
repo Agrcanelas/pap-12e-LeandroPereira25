@@ -7,7 +7,7 @@
 <html>
 
 <head>
-	<title>lalala</title>
+	<title>Site carinhoso</title>
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 	<link rel="stylesheet" href="assets/css/main.css" />
@@ -24,7 +24,7 @@
 
 				<!-- Header -->
 				<header id="header">
-					<a href="index.html" class="logo"><strong>Site feito por Leandro Pereira </strong> </a>
+					<a class="logo"><strong>Site feito por Leandro Pereira </strong> </a>
 					<ul class="icons">
 						<li><a href="#" class="icon brands fa-twitter"><span class="label">Twitter</span></a></li>
 						<li><a href="#" class="icon brands fa-facebook-f"><span class="label">Facebook</span></a></li>
@@ -42,11 +42,10 @@
 							<h1>SAS</h1>
 							<p>Save Animals Souls</p>
 						</header>
-						<br><strong>Bem-vindo ao nosso espaço dedicado ao cuidado e proteção dos animais!</strong></br>
-							<p>Aqui, acreditamos que cada vida importa. Trabalhamos para oferecer apoio, informação e
+						<br><strong>Bem-vindo ao meu site dedicado ao cuidado e proteção dos animais!</strong></br>
+							<p>Neste site, acredito que cada vida importa. Trabalho para oferecer apoio, informação e
 							iniciativas que promovem o bem-estar animal. Seja adotando, ajudando ou aprendendo mais
-							sobre como proteger nossos amigos de quatro patas, você está no lugar certo. Junte-se a nós
-							e faça parte dessa missão de amor, respeito e consciência.</p>
+							sobre como proteger nossos amigos de quaisquer patas. </p>
 						<ul class="actions">
 							<li><a href="#" class="button big">Learn More</a></li>
 						</ul>
