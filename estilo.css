@@ -201,6 +201,189 @@ body {
     color: #4CAF50;
 }
 
+/* ESTATÍSTICAS */
+.estatisticas {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 60px 5%;
+    background: linear-gradient(135deg, #4CAF50 0%, #66BB6A 100%);
+    color: white;
+    flex-wrap: wrap;
+    gap: 30px;
+}
+
+.estatistica-item {
+    text-align: center;
+    flex: 1;
+    min-width: 200px;
+}
+
+.estatistica-item .numero {
+    font-size: 48px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.estatistica-item .label {
+    font-size: 16px;
+    opacity: 0.9;
+    font-weight: 300;
+}
+
+/* COMO AJUDAR */
+.como-ajudar {
+    padding: 80px 5%;
+    background: #f5f5f5;
+    text-align: center;
+}
+
+.titulo-secao {
+    font-size: 40px;
+    color: #2c3e50;
+    margin-bottom: 10px;
+}
+
+.subtitulo-secao {
+    font-size: 18px;
+    color: #666;
+    margin-bottom: 50px;
+}
+
+.cards-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.card {
+    background: white;
+    padding: 40px 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+}
+
+.card-icone {
+    font-size: 60px;
+    margin-bottom: 20px;
+}
+
+.card h3 {
+    font-size: 24px;
+    color: #2c3e50;
+    margin-bottom: 15px;
+}
+
+.card p {
+    font-size: 15px;
+    color: #666;
+    line-height: 1.6;
+    margin-bottom: 25px;
+}
+
+.botao-card {
+    display: inline-block;
+    padding: 12px 30px;
+    background: #4CAF50;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+    font-weight: 500;
+}
+
+.botao-card:hover {
+    background: #45a049;
+    transform: scale(1.05);
+}
+
+/* RODAPÉ */
+.rodape {
+    background: #2c3e50;
+    color: white;
+    padding: 60px 5% 20px;
+}
+
+.rodape-conteudo {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 40px;
+    max-width: 1200px;
+    margin: 0 auto 40px;
+}
+
+.rodape-coluna h3 {
+    font-size: 24px;
+    margin-bottom: 15px;
+    color: #4CAF50;
+}
+
+.rodape-coluna h4 {
+    font-size: 18px;
+    margin-bottom: 15px;
+    color: #4CAF50;
+}
+
+.rodape-coluna p {
+    font-size: 14px;
+    line-height: 1.6;
+    color: #bbb;
+    margin-bottom: 20px;
+}
+
+.rodape-coluna ul {
+    list-style: none;
+}
+
+.rodape-coluna ul li {
+    margin-bottom: 10px;
+}
+
+.rodape-coluna ul li a {
+    color: #bbb;
+    text-decoration: none;
+    transition: color 0.3s ease;
+    font-size: 14px;
+}
+
+.rodape-coluna ul li a:hover {
+    color: #4CAF50;
+}
+
+.redes-sociais {
+    display: flex;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.redes-sociais a {
+    font-size: 24px;
+    transition: transform 0.3s ease;
+}
+
+.redes-sociais a:hover {
+    transform: scale(1.2);
+}
+
+.rodape-bottom {
+    text-align: center;
+    padding-top: 30px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.rodape-bottom p {
+    font-size: 14px;
+    color: #bbb;
+}
+
 /* ============================================ */
 /* MEDIA QUERIES - RESPONSIVIDADE */
 /* ============================================ */
