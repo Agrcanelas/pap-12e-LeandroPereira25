@@ -19,14 +19,67 @@
 
     <!-- Cabeçalho -->
     <header class="cabecalho">
-        <h1>SAS</h1>
-        <p>Save Animal Souls</p>
+        <!-- Carrossel de Imagens -->
+        <div class="carrossel">
+            <div class="slide ativo" style="background-image: url('imagens/img1.jpg');"></div>
+            <div class="slide" style="background-image: url('imagens/img2.jpg');"></div>
+            <div class="slide" style="background-image: url('imagens/img3');"></div>
+        </div>
         
+        <!-- Overlay verde por cima das imagens -->
+        <div class="overlay"></div>
+        
+        <!-- Conteúdo do cabeçalho -->
+        <div class="conteudo-cabecalho">
+            <h1>SAS</h1>
+            <p>Save Animal Souls</p>
+            <p class="descricao">
+                Neste site acredito que cada vida importa. Trabalho para oferecer apoio, informação e iniciativas que promovem o bem-estar animal. Seja adotando, ajudando ou aprendendo mais sobre como proteger os nossos amigos de todas as patas.
+            </p>
+            <button>Começar</button>
+        </div>
+        
+        <!-- Indicadores (bolinhas) -->
+        <div class="indicadores">
+            <span class="indicador ativo" data-slide="0"></span>
+            <span class="indicador" data-slide="1"></span>
+            <span class="indicador" data-slide="2"></span>
+        </div>
     </header>
-
-<div class="banner-descricao">
-    Nosso objetivo é proteger, resgatar e dar uma nova chance a animais em situação de risco.
-</div>
+    
+    <script>
+        // Carrossel automático
+        let slideAtual = 0;
+        const slides = document.querySelectorAll('.slide');
+        const indicadores = document.querySelectorAll('.indicador');
+        const totalSlides = slides.length;
+        
+        function mostrarSlide(index) {
+            // Remove classe ativo de todos
+            slides.forEach(slide => slide.classList.remove('ativo'));
+            indicadores.forEach(ind => ind.classList.remove('ativo'));
+            
+            // Adiciona classe ativo ao slide atual
+            slides[index].classList.add('ativo');
+            indicadores[index].classList.add('ativo');
+        }
+        
+        function proximoSlide() {
+            slideAtual = (slideAtual + 1) % totalSlides;
+            mostrarSlide(slideAtual);
+        }
+        
+        // Muda automaticamente a cada 5 segundos
+        setInterval(proximoSlide, 5000);
+        
+        // Clique nos indicadores
+        indicadores.forEach((indicador, index) => {
+            indicador.addEventListener('click', () => {
+                slideAtual = index;
+                mostrarSlide(slideAtual);
+            });
+        });
+    </script>
 
     <!-- Seção de Conteúdo -->
     <section class="conteudo">
