@@ -58,10 +58,10 @@
             </div>
 
             <p class="texto-registo">
-                Ainda não tem conta? <a href="registo.html">Registar aqui</a>
+                Ainda não tem conta? <a href="formregisto.php">Registar aqui</a>
             </p>
 
-            <a href="index.html" class="link-voltar">← Voltar à Página Inicial</a>
+            <a href="index.php" class="link-voltar">← Voltar à Página Inicial</a>
         </div>
     </div>
 </body>

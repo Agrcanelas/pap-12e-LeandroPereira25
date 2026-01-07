@@ -13,13 +13,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
     // Validar se os campos obrigatórios não estão vazios
     if (empty($nome) || empty($email) || empty($password) || empty($confirmar_password)) {
-        header("Location: registo.html?erro=vazio");
+        header("Location: formregisto.php?erro=vazio");
         exit();
     }
     
     // Verificar se as passwords coincidem
     if ($password !== $confirmar_password) {
-        header("Location: registo.html?erro=passwords");
+        header("Location: formregisto.php?erro=passwords");
         exit();
     }
     
@@ -32,7 +32,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
     if ($resultado->num_rows > 0) {
         // Email já registado
-        header("Location: registo.html?erro=email_existe");
+        header("Location: formregisto.php?erro=email_existe");
         exit();
     }
     
@@ -46,11 +46,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
     if ($stmt->execute()) {
         // Registo bem-sucedido
-        header("Location: login.html?sucesso=registo");
+        header("Location: formlogin.php?sucesso=registo");
         exit();
     } else {
         // Erro ao registar
-        header("Location: registo.html?erro=bd");
+        header("Location: formregisto.php?erro=bd");
         exit();
     }
     
@@ -58,7 +58,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt_verificar->close();
 } else {
     // Se tentar aceder diretamente sem POST, redireciona
-    header("Location: registo.html");
+    header("Location: formregisto.php");
     exit();
 }
 

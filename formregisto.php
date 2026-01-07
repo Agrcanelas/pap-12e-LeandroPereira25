@@ -72,10 +72,10 @@
             </div>
 
             <p class="texto-registo">
-                Já tem conta? <a href="login.html">Fazer login</a>
+                Já tem conta? <a href="formlogin.php">Fazer login</a>
             </p>
 
-            <a href="index.html" class="link-voltar">← Voltar à Página Inicial</a>
+            <a href="index.php" class="link-voltar">← Voltar à Página Inicial</a>
         </div>
     </div>
 </body>
