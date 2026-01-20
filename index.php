@@ -9,13 +9,7 @@
 <body>
 
     <!-- Barra de Navegação -->
-    <div class="barra-navegacao">
-        <a class="ativo" href="#">Início</a>
-        <a href="formlogin.php">Login</a>
-        <a href="#">Link 2</a>
-        <a href="#">Link 3</a>
-        <a href="#">Link 4</a>
-    </div>
+    <?php include 'menu.php'; ?>
 
     <!-- Cabeçalho -->
     <header class="cabecalho">

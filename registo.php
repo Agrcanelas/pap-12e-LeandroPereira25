@@ -24,7 +24,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
     
     // Verificar se o email já existe
-    $sql_verificar = "SELECT id FROM utilizadores WHERE email = ?";
+    $sql_verificar = "SELECT id_utilizador FROM utilizador WHERE email = ?";
     $stmt_verificar = $conn->prepare($sql_verificar);
     $stmt_verificar->bind_param("s", $email);
     $stmt_verificar->execute();
@@ -40,7 +40,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $password_hash = password_hash($password, PASSWORD_DEFAULT);
     
     // Inserir novo utilizador na base de dados
-    $sql = "INSERT INTO utilizadores (nome, email, telefone, password, data_registo) VALUES (?, ?, ?, ?, NOW())";
+    $sql = "INSERT INTO utilizador (nome, email, telefone, password) VALUES (?, ?, ?, ?)";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("ssss", $nome, $email, $telefone, $password_hash);
     
