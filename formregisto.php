@@ -58,12 +58,6 @@
                     <label for="confirmar_password">Confirmar Password</label>
                     <input type="password" id="confirmar_password" name="confirmar_password" required placeholder="••••••••" minlength="6">
                 </div>
-
-                <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 20px; font-size: 14px; color: #666;">
-                    <input type="checkbox" required>
-                    Aceito os <a href="#" style="color: #4CAF50;">termos e condições</a>
-                </label>
-
                 <button type="submit" class="botao-login">Registar</button>
             </form>
 

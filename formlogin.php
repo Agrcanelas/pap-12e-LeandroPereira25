@@ -43,12 +43,6 @@
                     <input type="password" id="password" name="password" required placeholder="••••••••">
                 </div>
 
-                <div class="lembrar-esquecer">
-                    <label>
-                        <input type="checkbox" name="lembrar"> Lembrar-me
-                    </label>
-                    <a href="#">Esqueceu a password?</a>
-                </div>
 
                 <button type="submit" class="botao-login">Entrar</button>
             </form>
