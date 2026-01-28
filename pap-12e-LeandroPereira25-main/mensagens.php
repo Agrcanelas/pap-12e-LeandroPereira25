@@ -346,6 +346,8 @@
         }
 
         $id_utilizador = $_SESSION['user_id'];
+        $conversas_unicas = [];
+        $id_selecionado = isset($_GET['com']) ? intval($_GET['com']) : null;
 
         // Buscar todas as conversas do utilizador
         $sql = "SELECT DISTINCT 
@@ -354,41 +356,34 @@
                         ELSE m.id_remetente
                     END as outro_id,
                     u.nome, u.foto_perfil,
-                    m.conteudo, m.data_envio,
-                    (SELECT MAX(id_mensagem) FROM mensagem WHERE 
-                        (id_remetente = ? AND id_destinatario = outro_id) OR
-                        (id_remetente = outro_id AND id_destinatario = ?)
-                    ) as ultima_msg
+                    m.mensagem, m.data_envio
                 FROM mensagem m
                 JOIN utilizador u ON (
                     (m.id_remetente = ? AND u.id_utilizador = m.id_destinatario) OR
                     (m.id_destinatario = ? AND u.id_utilizador = m.id_remetente)
                 )
                 WHERE m.id_remetente = ? OR m.id_destinatario = ?
-                ORDER BY m.data_envio DESC
-                LIMIT 1, 50";
+                ORDER BY m.data_envio DESC";
 
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param("iiiiiiiii", $id_utilizador, $id_utilizador, $id_utilizador, $id_utilizador, $id_utilizador, $id_utilizador, $id_utilizador);
-        $stmt->execute();
-        $resultado = $stmt->get_result();
+        if ($stmt) {
+            $stmt->bind_param("iiiii", $id_utilizador, $id_utilizador, $id_utilizador, $id_utilizador, $id_utilizador);
+            $stmt->execute();
+            $resultado = $stmt->get_result();
 
-        $conversas = [];
-        while ($row = $resultado->fetch_assoc()) {
-            $conversas[] = $row;
-        }
-
-        // Buscar conversas únicas
-        $conversas_unicas = [];
-        $ids_vistos = [];
-        foreach ($conversas as $conversa) {
-            if (!in_array($conversa['outro_id'], $ids_vistos)) {
-                $conversas_unicas[] = $conversa;
-                $ids_vistos[] = $conversa['outro_id'];
+            $ids_vistos = [];
+            while ($row = $resultado->fetch_assoc()) {
+                if (!in_array($row['outro_id'], $ids_vistos)) {
+                    $conversas_unicas[] = $row;
+                    $ids_vistos[] = $row['outro_id'];
+                }
             }
+            $stmt->close();
         }
 
-        $id_selecionado = isset($_GET['com']) ? intval($_GET['com']) : (count($conversas_unicas) > 0 ? $conversas_unicas[0]['outro_id'] : null);
+        if (empty($id_selecionado) && count($conversas_unicas) > 0) {
+            $id_selecionado = $conversas_unicas[0]['outro_id'];
+        }
     ?>
 
     <div class="mensagens-container">
@@ -399,7 +394,7 @@
             <?php if (empty($conversas_unicas)): ?>
                 <div class="lista-vazia">
                     <p>Nenhuma conversa ainda</p>
-                    <small>Comece a conversar com os donos dos animais!</small>
+                    <small>Encontre um animal e clique em<br>"Enviar Mensagem"!</small>
                 </div>
             <?php else: ?>
                 <?php foreach ($conversas_unicas as $conversa): ?>
@@ -409,7 +404,7 @@
                                  alt="<?php echo htmlspecialchars($conversa['nome']); ?>" 
                                  class="conversa-foto">
                             <span class="conversa-nome"><?php echo htmlspecialchars($conversa['nome']); ?></span>
-                            <div class="conversa-preview"><?php echo htmlspecialchars(substr($conversa['conteudo'], 0, 40)); ?>...</div>
+                            <div class="conversa-preview"><?php echo htmlspecialchars(substr($conversa['mensagem'], 0, 40)); ?>...</div>
                             <div class="conversa-data"><?php echo date('d/m H:i', strtotime($conversa['data_envio'])); ?></div>
                         </div>
                     </a>
@@ -423,21 +418,29 @@
                 // Buscar dados do utilizador selecionado
                 $sql_user = "SELECT id_utilizador, nome, foto_perfil FROM utilizador WHERE id_utilizador = ?";
                 $stmt_user = $conn->prepare($sql_user);
-                $stmt_user->bind_param("i", $id_selecionado);
-                $stmt_user->execute();
-                $user_data = $stmt_user->get_result()->fetch_assoc();
+                if ($stmt_user) {
+                    $stmt_user->bind_param("i", $id_selecionado);
+                    $stmt_user->execute();
+                    $user_result = $stmt_user->get_result();
+                    $user_data = $user_result->fetch_assoc();
+                    $stmt_user->close();
+                }
 
                 // Buscar todas as mensagens da conversa
-                $sql_msgs = "SELECT m.*, u.nome, u.foto_perfil 
-                             FROM mensagem m
-                             JOIN utilizador u ON m.id_remetente = u.id_utilizador
-                             WHERE (m.id_remetente = ? AND m.id_destinatario = ?) 
-                                OR (m.id_remetente = ? AND m.id_destinatario = ?)
-                             ORDER BY m.data_envio ASC";
-                $stmt_msgs = $conn->prepare($sql_msgs);
-                $stmt_msgs->bind_param("iiii", $id_utilizador, $id_selecionado, $id_selecionado, $id_utilizador);
-                $stmt_msgs->execute();
-                $msgs_result = $stmt_msgs->get_result();
+                if ($user_data) {
+                    $sql_msgs = "SELECT m.id_mensagem, m.id_remetente, m.id_destinatario, m.mensagem, m.data_envio, u.nome, u.foto_perfil 
+                                 FROM mensagem m
+                                 JOIN utilizador u ON m.id_remetente = u.id_utilizador
+                                 WHERE (m.id_remetente = ? AND m.id_destinatario = ?) 
+                                    OR (m.id_remetente = ? AND m.id_destinatario = ?)
+                                 ORDER BY m.data_envio ASC";
+                    $stmt_msgs = $conn->prepare($sql_msgs);
+                    if ($stmt_msgs) {
+                        $stmt_msgs->bind_param("iiii", $id_utilizador, $id_selecionado, $id_selecionado, $id_utilizador);
+                        $stmt_msgs->execute();
+                        $msgs_result = $stmt_msgs->get_result();
+                    }
+                }
             ?>
                 <!-- Header do Chat -->
                 <div class="chat-header">
@@ -451,21 +454,28 @@
 
                 <!-- Mensagens -->
                 <div class="chat-messages" id="chat-messages">
-                    <?php while ($msg = $msgs_result->fetch_assoc()): 
-                        $é_remetente = ($msg['id_remetente'] == $id_utilizador);
-                    ?>
-                        <div class="mensagem <?php echo $é_remetente ? 'sent' : 'received'; ?>">
-                            <?php if (!$é_remetente): ?>
-                                <img src="<?php echo htmlspecialchars($msg['foto_perfil'] ?: 'uploads/default-avatar.png'); ?>" 
-                                     alt="<?php echo htmlspecialchars($msg['nome']); ?>" 
-                                     class="mensagem-foto">
-                            <?php endif; ?>
-                            <div>
-                                <div class="mensagem-conteudo"><?php echo nl2br(htmlspecialchars($msg['conteudo'])); ?></div>
-                                <div class="mensagem-hora"><?php echo date('H:i', strtotime($msg['data_envio'])); ?></div>
+                    <?php if ($msgs_result && $msgs_result->num_rows > 0): ?>
+                        <?php while ($msg = $msgs_result->fetch_assoc()): 
+                            $é_remetente = ($msg['id_remetente'] == $id_utilizador);
+                        ?>
+                            <div class="mensagem <?php echo $é_remetente ? 'sent' : 'received'; ?>">
+                                <?php if (!$é_remetente): ?>
+                                    <img src="<?php echo htmlspecialchars($msg['foto_perfil'] ?: 'uploads/default-avatar.png'); ?>" 
+                                         alt="<?php echo htmlspecialchars($msg['nome']); ?>" 
+                                         class="mensagem-foto">
+                                <?php endif; ?>
+                                <div>
+                                    <div class="mensagem-conteudo"><?php echo nl2br(htmlspecialchars($msg['mensagem'])); ?></div>
+                                    <div class="mensagem-hora"><?php echo date('H:i', strtotime($msg['data_envio'])); ?></div>
+                                </div>
                             </div>
+                        <?php endwhile; ?>
+                    <?php else: ?>
+                        <div style="text-align: center; color: #999; padding: 30px;">
+                            <p>Nenhuma mensagem ainda...</p>
+                            <small>Seja o primeiro a iniciar a conversa!</small>
                         </div>
-                    <?php endwhile; ?>
+                    <?php endif; ?>
                 </div>
 
                 <!-- Input de Mensagem -->
@@ -479,8 +489,9 @@
             <?php else: ?>
                 <div class="chat-vazio">
                     <div>
-                        <h3>Nenhuma conversa selecionada</h3>
-                        <p>Selecione uma conversa ou comece uma nova!</p>
+                        <h3>👋 Bem-vindo ao Chat!</h3>
+                        <p>Selecione uma conversa na esquerda ou<br>comece uma nova clicando em<br>"Enviar Mensagem" nos detalhes de um animal!</p>
+                        <a href="animais.php" style="display: inline-block; margin-top: 20px; padding: 12px 24px; background: linear-gradient(135deg, #66BB6A 0%, #81C784 100%); color: white; text-decoration: none; border-radius: 8px;">Ver Animais</a>
                     </div>
                 </div>
             <?php endif; ?>

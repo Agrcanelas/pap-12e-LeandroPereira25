@@ -14,15 +14,15 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 
 $id_remetente = $_SESSION['user_id'];
 $id_destinatario = intval($_POST['para_id']);
-$conteudo = trim($_POST['conteudo']);
+$msg_texto = trim($_POST['conteudo']);
 
 // Validações básicas
-if (empty($conteudo)) {
+if (empty($msg_texto)) {
     header('Location: mensagens.php?com=' . $id_destinatario . '&erro=vazio');
     exit();
 }
 
-if (strlen($conteudo) > 1000) {
+if (strlen($msg_texto) > 1000) {
     header('Location: mensagens.php?com=' . $id_destinatario . '&erro=longo');
     exit();
 }
@@ -38,9 +38,9 @@ if ($stmt_check->get_result()->num_rows === 0) {
 }
 
 // Inserir mensagem
-$sql = "INSERT INTO mensagem (id_remetente, id_destinatario, conteudo, data_envio) VALUES (?, ?, ?, NOW())";
+$sql = "INSERT INTO mensagem (id_remetente, id_destinatario, mensagem, data_envio) VALUES (?, ?, ?, NOW())";
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("iis", $id_remetente, $id_destinatario, $conteudo);
+$stmt->bind_param("iis", $id_remetente, $id_destinatario, $msg_texto);
 
 if ($stmt->execute()) {
     header('Location: mensagens.php?com=' . $id_destinatario . '&sucesso=1');
