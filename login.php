@@ -10,7 +10,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
     // Validar se os campos não estão vazios
     if (empty($email) || empty($password)) {
-        header("Location: formlogin.php?erro=vazio");
+        header("Location: login.html?erro=vazio");
         exit();
     }
     
@@ -38,19 +38,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             exit();
         } else {
             // Password incorreta
-            header("Location: formlogin.php?erro=credenciais");
+            header("Location: login.html?erro=credenciais");
             exit();
         }
     } else {
         // Utilizador não encontrado
-        header("Location: formlogin.php?erro=credenciais");
+        header("Location: login.html?erro=credenciais");
         exit();
     }
     
     $stmt->close();
 } else {
     // Se tentar aceder diretamente sem POST, redireciona
-    header("Location: formlogin.php");
+    header("Location: login.html");
     exit();
 }
 

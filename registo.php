@@ -13,13 +13,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
     // Validar se os campos obrigatórios não estão vazios
     if (empty($nome) || empty($email) || empty($password) || empty($confirmar_password)) {
-        header("Location: formregisto.php?erro=vazio");
+        header("Location: registo.html?erro=vazio");
         exit();
     }
     
     // Verificar se as passwords coincidem
     if ($password !== $confirmar_password) {
-        header("Location: formregisto.php?erro=passwords");
+        header("Location: registo.html?erro=passwords");
         exit();
     }
     
@@ -32,7 +32,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
     if ($resultado->num_rows > 0) {
         // Email já registado
-        header("Location: formregisto.php?erro=email_existe");
+        header("Location: registo.html?erro=email_existe");
         exit();
     }
     
@@ -40,17 +40,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $password_hash = password_hash($password, PASSWORD_DEFAULT);
     
     // Inserir novo utilizador na base de dados
-    $sql = "INSERT INTO utilizador (nome, email, telefone, password) VALUES (?, ?, ?, ?)";
+    $sql = "INSERT INTO utilizador (nome, email, telefone, password, data_registo) VALUES (?, ?, ?, ?, NOW())";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("ssss", $nome, $email, $telefone, $password_hash);
     
     if ($stmt->execute()) {
         // Registo bem-sucedido
-        header("Location: formlogin.php?sucesso=registo");
+        header("Location: login.html?sucesso=registo");
         exit();
     } else {
         // Erro ao registar
-        header("Location: formregisto.php?erro=bd");
+        header("Location: registo.html?erro=bd");
         exit();
     }
     
@@ -58,7 +58,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt_verificar->close();
 } else {
     // Se tentar aceder diretamente sem POST, redireciona
-    header("Location: formregisto.php");
+    header("Location: registo.html");
     exit();
 }
 

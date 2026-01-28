@@ -2,7 +2,7 @@
 require_once 'ligaDB.php';
 
 if (!isset($_SESSION['logado'])) {
-    header("Location: login.php");
+    header("Location: login.html");
     exit();
 }
 
@@ -55,7 +55,7 @@ $user = $resultado->fetch_assoc();
                 </div>
                 <div class="grupo-input">
                     <label>Biografia</label>
-                    <textarea name="biografia" rows="5" style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-family: inherit;"><?php echo htmlspecialchars($user['biografia']); ?></textarea>
+                    <textarea name="biografia" rows="5" style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-family: inherit; resize: vertical;"><?php echo htmlspecialchars($user['biografia']); ?></textarea>
                 </div>
                 <button type="submit" class="botao-login">Guardar Alterações</button>
             </form>

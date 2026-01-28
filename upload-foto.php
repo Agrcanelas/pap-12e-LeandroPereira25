@@ -2,7 +2,7 @@
 require_once 'ligaDB.php';
 
 if (!isset($_SESSION['logado'])) {
-    header("Location: login.php");
+    header("Location: login.html");
     exit();
 }
 

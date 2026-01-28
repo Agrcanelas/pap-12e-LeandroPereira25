@@ -3,13 +3,13 @@ require_once 'ligaDB.php';
 
 // Verificar se o utilizador está logado
 if (!isset($_SESSION['logado']) || $_SESSION['logado'] !== true) {
-    header("Location: login.php");
+    header("Location: login.html");
     exit();
 }
 
 // Obter dados do utilizador da base de dados
 $user_id = $_SESSION['user_id'];
-$sql = "SELECT nome, email, telefone, biografia, foto_perfil FROM utilizador WHERE id_utilizador = ?";
+$sql = "SELECT nome, email, telefone, biografia, foto_perfil, data_registo FROM utilizador WHERE id_utilizador = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("i", $user_id);
 $stmt->execute();
@@ -253,6 +253,24 @@ $data_registo = date('d/m/Y', strtotime($utilizador['data_registo']));
             color: #000;
         }
 
+        .grupo-input {
+            margin-bottom: 15px;
+        }
+
+        .grupo-input label {
+            display: block;
+            margin-bottom: 8px;
+            color: #2c3e50;
+            font-weight: 500;
+        }
+
+        .grupo-input input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+        }
+
         @media (max-width: 768px) {
             .dashboard-container {
                 margin-top: 80px;
@@ -282,8 +300,8 @@ $data_registo = date('d/m/Y', strtotime($utilizador['data_registo']));
     <div class="barra-navegacao">
         <a href="index.php">Início</a>
         <a class="ativo" href="dashboard.php">Conta</a>
-        <a href="#">Meus Animais</a>
-        <a href="#">Adoptar</a>
+        <a href="animais.php">Adotar</a>
+        <a href="meus-animais.php">Minhas Listagens</a>
         <a href="logout.php">Sair</a>
     </div>
 
@@ -328,7 +346,7 @@ $data_registo = date('d/m/Y', strtotime($utilizador['data_registo']));
         <!-- Botões de Ação -->
         <div class="botoes-acao">
             <a href="editar-perfil.php" class="btn btn-primary">✏️ Editar Perfil</a>
-            
+            <a href="alterar-password.php" class="btn btn-secondary">🔒 Alterar Password</a>
             <a href="logout.php" class="btn btn-danger">🚪 Terminar Sessão</a>
         </div>
     </div>
@@ -341,8 +359,8 @@ $data_registo = date('d/m/Y', strtotime($utilizador['data_registo']));
             <form action="upload-foto.php" method="POST" enctype="multipart/form-data">
                 <div class="grupo-input">
                     <label for="foto">Escolher nova foto:</label>
-                    <input type="file" name="foto" id="foto" accept="image/*" required style="margin: 15px 0; width: 100%;">
-                    <p style="font-size: 13px; color: #666;">Formatos aceites: JPG, PNG, GIF (máx. 5MB)</p>
+                    <input type="file" name="foto" id="foto" accept="image/*" required>
+                    <p style="font-size: 13px; color: #666; margin-top: 10px;">Formatos aceites: JPG, PNG, GIF (máx. 5MB)</p>
                 </div>
                 <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 15px;">Enviar Foto</button>
             </form>
