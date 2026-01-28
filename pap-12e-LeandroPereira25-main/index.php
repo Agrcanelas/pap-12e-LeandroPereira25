@@ -170,7 +170,7 @@
                 <h4>Como Ajudar</h4>
                 <ul>
                     <li><a href="#">Adotar um Animal</a></li>
-                    <li><a href="#">Fazer Doação</a></li>
+                    <li><a href="">Forma de ajudar</a></li>
                     <li><a href="#">Ser Voluntário</a></li>
                     <li><a href="#">Apadrinhar</a></li>
                 </ul>
