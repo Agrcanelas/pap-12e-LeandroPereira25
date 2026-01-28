@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registo - Save Animal Souls</title>
+    <link rel="stylesheet" href="estilo-login.css">
+</head>
+<body>
+    <div class="container-login">
+        <div class="caixa-login">
+            <div class="logo">
+                <h1>SAS</h1>
+                <p>Save Animal Souls</p>
+            </div>
+
+            <h2>Criar Conta</h2>
+
+            <?php
+            // Mostrar mensagens de erro
+            if(isset($_GET['erro'])) {
+                echo '<div class="mensagem erro">';
+                if($_GET['erro'] == 'passwords') {
+                    echo 'As passwords não coincidem!';
+                } elseif($_GET['erro'] == 'email_existe') {
+                    echo 'Este email já está registado!';
+                } elseif($_GET['erro'] == 'vazio') {
+                    echo 'Por favor, preencha todos os campos!';
+                } elseif($_GET['erro'] == 'bd') {
+                    echo 'Erro ao registar. Tente novamente.';
+                }
+                echo '</div>';
+            }
+            ?>
+
+            <form action="registo.php" method="POST">
+                <div class="grupo-input">
+                    <label for="nome">Nome Completo</label>
+                    <input type="text" id="nome" name="nome" required placeholder="João Silva">
+                </div>
+
+                <div class="grupo-input">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required placeholder="seuemail@exemplo.com">
+                </div>
+
+                <div class="grupo-input">
+                    <label for="telefone">Telefone (opcional)</label>
+                    <input type="tel" id="telefone" name="telefone" placeholder="+351 912 345 678">
+                </div>
+
+                <div class="grupo-input">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required placeholder="••••••••" minlength="6">
+                </div>
+
+                <div class="grupo-input">
+                    <label for="confirmar_password">Confirmar Password</label>
+                    <input type="password" id="confirmar_password" name="confirmar_password" required placeholder="••••••••" minlength="6">
+                </div>
+                <button type="submit" class="botao-login">Registar</button>
+            </form>
+
+            <div class="divisor">
+                <span>OU</span>
+            </div>
+
+            <p class="texto-registo">
+                Já tem conta? <a href="formlogin.php">Fazer login</a>
+            </p>
+
+            <a href="index.php" class="link-voltar">← Voltar à Página Inicial</a>
+        </div>
+    </div>
+</body>
+</html>

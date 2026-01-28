@@ -4,18 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Página Inicial</title>
-    <link rel="stylesheet" href="estilo.css?v=2">
+    <link rel="stylesheet" href="estilo.css">
 </head>
 <body>
 
     <!-- Barra de Navegação -->
-    <div class="barra-navegacao">
-        <a class="ativo" href="index.php">Inícioaaaaa</a>
-        <a href="formlogin.php">Login</a>
-        <a href="animais.php">Animais</a>
-        <a href="#">Link 3</a>
-        <a href="#">Link 4</a>
-    </div>
+    <?php include 'menu.php'; ?>
+
     <!-- Cabeçalho -->
     <header class="cabecalho">
         <!-- Carrossel de Imagens -->
@@ -31,7 +26,7 @@
         <!-- Conteúdo do cabeçalho -->
         <div class="conteudo-cabecalho">
             <h1>SAS</h1>
-            <p>Save Animal Souls like a boss</p>
+            <p>Save Animal Soulsaaaaaaa</p>
             <p class="descricao">
                 Neste site acredito que cada vida importa. Trabalho para oferecer apoio, informação e iniciativas que promovem o bem-estar animal. Seja adotando, ajudando ou aprendendo mais sobre como proteger os nossos amigos de todas as patas.
             </p>
