@@ -10,7 +10,7 @@
 
     <!-- Barra de Navegação -->
     <div class="barra-navegacao">
-        <a class="ativo" href="index.php">Início</a>
+        <a class="ativo" href="index.php">Inícioaaaaa</a>
         <a href="formlogin.php">Login</a>
         <a href="animais.php">Animais</a>
         <a href="#">Link 3</a>
