@@ -26,7 +26,7 @@
         <!-- Conteúdo do cabeçalho -->
         <div class="conteudo-cabecalho">
             <h1>SAS</h1>
-            <p>Save Animal Soulsaaaaaaa</p>
+            <p>Save Animal Souls</p>
             <p class="descricao">
                 Neste site acredito que cada vida importa. Trabalho para oferecer apoio, informação e iniciativas que promovem o bem-estar animal. Seja adotando, ajudando ou aprendendo mais sobre como proteger os nossos amigos de todas as patas.
             </p>
