@@ -30,7 +30,7 @@
             <p class="descricao">
                 Neste site acredito que cada vida importa. Trabalho para oferecer apoio, informação e iniciativas que promovem o bem-estar animal. Seja adotando, ajudando ou aprendendo mais sobre como proteger os nossos amigos de todas as patas.
             </p>
-            <button>Começar</button>
+            <a href="animais.php"><button>Começar</button></a>
         </div>
         
         <!-- Indicadores (bolinhas) -->
