@@ -94,6 +94,31 @@ body {
     background: #d32f2f !important;
 }
 
+.nav-profile {
+    padding: 0 15px;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    height: 100%;
+    transition: all 0.3s ease;
+}
+
+.nav-profile-img {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #4CAF50;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.nav-profile:hover .nav-profile-img {
+    transform: scale(1.1);
+    border-color: #45a049;
+    box-shadow: 0 0 10px rgba(76, 175, 80, 0.5);
+}
+
 /* BARRA DE NAVEGAÇÃO ANTIGA - MANTIDA PARA COMPATIBILIDADE */
 .barra-navegacao {
     position: fixed;

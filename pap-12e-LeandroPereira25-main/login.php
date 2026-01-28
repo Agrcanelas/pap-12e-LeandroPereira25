@@ -15,7 +15,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
     
     // Preparar query SQL para prevenir SQL Injection
-    $sql = "SELECT id_utilizador, nome, email, password FROM utilizador WHERE email = ?";
+    $sql = "SELECT id_utilizador, nome, email, password, foto_perfil FROM utilizador WHERE email = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("s", $email);
     $stmt->execute();
@@ -31,6 +31,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['user_id'] = $utilizador['id_utilizador'];
             $_SESSION['user_nome'] = $utilizador['nome'];
             $_SESSION['user_email'] = $utilizador['email'];
+            $_SESSION['foto_perfil'] = $utilizador['foto_perfil'] ?? 'uploads/default-avatar.png';
             $_SESSION['logado'] = true;
             
             // Redirecionar para página protegida ou home
