@@ -220,13 +220,8 @@ $resultado = $stmt->get_result();
     </style>
 </head>
 <body>
-    <div class="barra-navegacao">
-        <a href="index.php">Início</a>
-        <a href="animais.php">Adotar</a>
-        <a class="ativo" href="meus-animais.php">Minhas Listagens</a>
-        <a href="dashboard.php">Conta</a>
-        <a href="logout.php">Sair</a>
-    </div>
+    <!-- Navbar -->
+    <?php include 'menu.php'; ?>
 
     <div class="animais-container">
         <div class="animais-header">

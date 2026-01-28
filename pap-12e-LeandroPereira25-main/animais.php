@@ -36,17 +36,7 @@ $resultado = $conn->query($sql);
 </head>
 <body>
     <!-- Navbar -->
-    <div class="barra-navegacao">
-        <a href="index.php">Início</a>
-        <a class="ativo" href="animais.php">Adotar</a>
-        <?php if(isset($_SESSION['logado'])): ?>
-            <a href="meus-animais.php">Minhas Listagens</a>
-            <a href="dashboard.php">Conta</a>
-            <a href="logout.php">Sair</a>
-        <?php else: ?>
-            <a href="login.php">Login</a>
-        <?php endif; ?>
-    </div>
+    <?php include 'menu.php'; ?>
 
 <div class="animais-container">
     <!-- Header -->

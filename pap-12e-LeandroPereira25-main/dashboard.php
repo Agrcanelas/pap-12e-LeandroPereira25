@@ -34,13 +34,7 @@ $data_registo = date('d/m/Y', strtotime($utilizador['data_registo']));
 </head>
 <body>
     <!-- Navbar -->
-    <div class="barra-navegacao">
-        <a href="index.php">Início</a>
-        <a class="ativo" href="dashboard.php">Conta</a>
-        <a href="#">Meus Animais</a>
-        <a href="#">Adoptar</a>
-        <a href="logout.php">Sair</a>
-    </div>
+    <?php include 'menu.php'; ?>
 
     <div class="dashboard-container">
         <!-- Header do Perfil -->

@@ -24,7 +24,7 @@
 }
 
 .btn-adicionar {
-    background: #4CAF50;
+    background: linear-gradient(135deg, #66BB6A 0%, #81C784 100%);
     color: white;
     padding: 12px 25px;
     border-radius: 8px;
@@ -34,8 +34,9 @@
 }
 
 .btn-adicionar:hover {
-    background: #45a049;
+    background: linear-gradient(135deg, #56A156 0%, #66A970 100%);
     transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(102, 187, 106, 0.3);
 }
 
 .filtros {
@@ -110,7 +111,7 @@
     position: absolute;
     top: 15px;
     right: 15px;
-    background: #4CAF50;
+    background: linear-gradient(135deg, #66BB6A 0%, #81C784 100%);
     color: white;
     padding: 8px 15px;
     border-radius: 20px;
@@ -195,7 +196,7 @@
 }
 
 .btn-marcar {
-    background: #4CAF50;
+    background: linear-gradient(135deg, #66BB6A 0%, #81C784 100%);
     color: white;
 }
 

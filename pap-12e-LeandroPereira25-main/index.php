@@ -1,3 +1,4 @@
+<?php require_once 'ligaDB.php'; ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
