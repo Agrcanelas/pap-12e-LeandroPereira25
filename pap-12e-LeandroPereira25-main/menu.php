@@ -8,6 +8,7 @@
             <li><a href="animais.php" class="nav-link">Animais</a></li>
             <?php if(isset($_SESSION['logado'])): ?>
                 <li><a href="meus-animais.php" class="nav-link">Meus Animais</a></li>
+                <li><a href="mensagens.php" class="nav-link">💬 Mensagens</a></li>
                 <li><a href="dashboard.php" class="nav-link">Conta</a></li>
                 <li>
                     <a href="dashboard.php" class="nav-profile">

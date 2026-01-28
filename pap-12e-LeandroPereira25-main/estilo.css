@@ -1,8 +1,10 @@
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap');
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Quicksand', sans-serif;
 }
 
 /* ANIMAÇÕES */
@@ -593,7 +595,20 @@ body {
 .rodape {
     background: linear-gradient(90deg, #2D5016 0%, #3A6B35 100%);
     color: white;
-    padding: 60px 5% 20px;
+    padding: 80px 5% 30px;
+    position: relative;
+    overflow: hidden;
+}
+
+.rodape::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at 0% 50%, rgba(255, 184, 77, 0.1) 0%, transparent 50%);
+    z-index: 0;
 }
 
 .rodape-conteudo {
@@ -602,18 +617,26 @@ body {
     gap: 40px;
     max-width: 1200px;
     margin: 0 auto 40px;
+    position: relative;
+    z-index: 1;
+}
+
+.rodape-coluna {
+    animation: fadeInUp 0.8s ease;
 }
 
 .rodape-coluna h3 {
     font-size: 24px;
     margin-bottom: 15px;
     color: #FFB84D;
+    font-weight: 700;
 }
 
 .rodape-coluna h4 {
     font-size: 18px;
     margin-bottom: 15px;
     color: #FFB84D;
+    font-weight: 600;
 }
 
 .rodape-coluna p {
@@ -634,8 +657,30 @@ body {
 .rodape-coluna ul li a {
     color: #bbb;
     text-decoration: none;
-    transition: color 0.3s ease;
+    transition: all 0.3s ease;
     font-size: 14px;
+    display: inline-block;
+}
+
+.rodape-coluna ul li a:hover {
+    color: #FFB84D;
+    transform: translateX(5px);
+}
+
+.redes-sociais {
+    display: flex;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.redes-sociais a {
+    font-size: 28px;
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+
+.redes-sociais a:hover {
+    transform: scale(1.2) rotate(10deg);
 }
 
 .rodape-coluna ul li a:hover {
