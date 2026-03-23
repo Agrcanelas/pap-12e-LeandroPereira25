@@ -35,32 +35,35 @@ if ($result && $result->num_rows > 0) {
     }
 }
 
-// 2. Verificar e criar tabela avaliacoes
-echo "<h3>Tabela Avaliações</h3>";
+echo "<h3>Tabela Denuncias</h3>";
 
-$sql_check = "SHOW TABLES LIKE 'avaliacoes'";
+$sql_check = "SHOW TABLES LIKE 'denuncias'";
 $result = $conn->query($sql_check);
 
 if ($result && $result->num_rows > 0) {
-    echo "✓ Tabela avaliacoes já existe<br>";
+    echo "✓ Tabela denuncias já existe<br>";
 } else {
-    echo "↻ Criando tabela avaliacoes...<br>";
-    
-    $sql = "CREATE TABLE IF NOT EXISTS avaliacoes (
-        id_avaliacao INT AUTO_INCREMENT PRIMARY KEY,
-        id_utilizador INT NOT NULL,
-        id_animal INT NOT NULL,
-        classificacao INT NOT NULL CHECK (classificacao >= 1 AND classificacao <= 5),
-        comentario TEXT,
-        data_avaliacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        FOREIGN KEY (id_utilizador) REFERENCES utilizador(id_utilizador) ON DELETE CASCADE,
-        FOREIGN KEY (id_animal) REFERENCES animal(id_animal) ON DELETE CASCADE,
-        INDEX idx_animal (id_animal),
-        INDEX idx_utilizador (id_utilizador)
+    echo "↻ Criando tabela denuncias...<br>";
+
+    $sql = "CREATE TABLE IF NOT EXISTS denuncias (
+        id_denuncia INT AUTO_INCREMENT PRIMARY KEY,
+        id_denunciante INT NOT NULL,
+        id_denunciado INT NOT NULL,
+        assunto VARCHAR(150) NOT NULL,
+        descricao TEXT NOT NULL,
+        motivo VARCHAR(250) DEFAULT NULL,
+        estado ENUM('pendente','em_analise','resolvida','rejeitada') NOT NULL DEFAULT 'pendente',
+        data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        data_atualizacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+        FOREIGN KEY (id_denunciante) REFERENCES utilizador(id_utilizador) ON DELETE CASCADE,
+        FOREIGN KEY (id_denunciado) REFERENCES utilizador(id_utilizador) ON DELETE CASCADE,
+        INDEX idx_denunciante (id_denunciante),
+        INDEX idx_denunciado (id_denunciado),
+        INDEX idx_estado (estado)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci";
-    
+
     if ($conn->query($sql) === TRUE) {
-        echo "✓ Tabela avaliacoes criada com sucesso<br>";
+        echo "✓ Tabela denuncias criada com sucesso<br>";
     } else {
         echo "✗ Erro ao criar tabela: " . $conn->error . "<br>";
     }

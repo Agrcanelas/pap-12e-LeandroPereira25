@@ -83,7 +83,7 @@ $resultado = $conn->query($sql);
                             <?php if ($animal['localidade']): ?>
                                 <p class="info-dono">📍 <?php echo htmlspecialchars($animal['localidade']); ?></p>
                             <?php endif; ?>
-                            <p class="info-dono">Publicado por: <?php echo htmlspecialchars($animal['nome_dono']); ?></p>
+                            <p class="info-dono">Publicado por: <a href="perfil-utilizador.php?id=<?php echo (int) $animal['id_utilizador']; ?>" style="color: #2D5016; font-weight: 600; text-decoration: none;"><?php echo htmlspecialchars($animal['nome_dono']); ?></a></p>
 
                             <div class="acoes-animal">
                                 <button onclick="verDetalhes(<?php echo $animal['id_animal']; ?>)" class="btn-acao btn-ver">Ver Mais</button>

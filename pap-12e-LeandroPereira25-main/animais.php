@@ -4,6 +4,7 @@ require_once 'ligaDB.php';
 // Filtros
 $filtro_especie = isset($_GET['especie']) ? $_GET['especie'] : '';
 $filtro_nome = isset($_GET['nome']) ? trim($_GET['nome']) : '';
+$is_admin = isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin';
 
 // Query para buscar animais
 $sql = "SELECT a.*, u.nome as nome_dono, u.email as email_dono 
@@ -108,7 +109,7 @@ if (isset($_SESSION['logado']) && isset($_SESSION['user_id'])) {
                         <?php if($animal['localidade']): ?>
                             <p class="info-dono">📍 <?php echo htmlspecialchars($animal['localidade']); ?></p>
                         <?php endif; ?>
-                        <p class="info-dono">Por: <?php echo htmlspecialchars($animal['nome_dono']); ?></p>
+                        <p class="info-dono">Por: <a href="perfil-utilizador.php?id=<?php echo (int) $animal['id_utilizador']; ?>" style="color: #2D5016; font-weight: 600; text-decoration: none;"><?php echo htmlspecialchars($animal['nome_dono']); ?></a></p>
                         <div class="acoes-animal">
                             <button onclick="verDetalhes(<?php echo $animal['id_animal']; ?>)" class="btn-acao btn-ver">Ver Mais</button>
                             <?php if(isset($_SESSION['logado'])): ?>
@@ -118,7 +119,7 @@ if (isset($_SESSION['logado']) && isset($_SESSION['user_id'])) {
                                     <a href="adicionar-favorito.php?id=<?php echo $animal['id_animal']; ?>" class="btn-acao btn-favorito" title="Adicionar aos favoritos">❤️ Favoritar</a>
                                 <?php endif; ?>
                             <?php endif; ?>
-                            <?php if(isset($_SESSION['logado']) && $_SESSION['user_id'] == $animal['id_utilizador']): ?>
+                            <?php if(isset($_SESSION['logado']) && ($_SESSION['user_id'] == $animal['id_utilizador'] || $is_admin)): ?>
                                 <button onclick="editarAnimal(<?php echo $animal['id_animal']; ?>)" class="btn-acao btn-editar">Editar</button>
                                 <?php if(!$animal['adotado']): ?>
                                     <button onclick="marcarAdotado(<?php echo $animal['id_animal']; ?>)" class="btn-acao btn-marcar">Adotado</button>

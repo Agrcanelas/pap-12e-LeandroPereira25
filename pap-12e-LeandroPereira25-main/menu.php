@@ -9,8 +9,12 @@
             <li><a href="animais-adotados.php" class="nav-link">Adotados</a></li>
             <?php if(isset($_SESSION['logado'])): ?>
                 <li><a href="meus-animais.php" class="nav-link">Meus Animais</a></li>
-                <li><a href="meus-favoritos.php" class="nav-link">❤️ Favoritos</a></li>
-                <li><a href="mensagens.php" class="nav-link">💬 Mensagens</a></li>
+                <li><a href="meus-favoritos.php" class="nav-link">Favoritos</a></li>
+                <li><a href="mensagens.php" class="nav-link">Mensagens</a></li>
+                <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
+                    <li><a href="admin-dashboard.php" class="nav-link">Admin</a></li>
+                    <li><a href="admin-denuncias.php" class="nav-link">Denúncias</a></li>
+                <?php endif; ?>
    
                 <li>
                     <a href="dashboard.php" class="nav-profile">

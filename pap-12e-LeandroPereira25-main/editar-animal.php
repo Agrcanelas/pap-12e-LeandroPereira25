@@ -8,11 +8,12 @@ if (!isset($_SESSION['logado']) || !isset($_GET['id'])) {
 
 $id_animal = intval($_GET['id']);
 $user_id = $_SESSION['user_id'];
+$is_admin = isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin';
 
 // Buscar Animal para pré-preencher
-$sql = "SELECT * FROM animal WHERE id_animal = ? AND id_utilizador = ?";
+$sql = "SELECT * FROM animal WHERE id_animal = ?";
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("ii", $id_animal, $user_id);
+$stmt->bind_param("i", $id_animal);
 $stmt->execute();
 $result = $stmt->get_result();
 
@@ -23,6 +24,11 @@ if ($result->num_rows === 0) {
 
 $animal = $result->fetch_assoc();
 $stmt->close();
+
+if ((int)$animal['id_utilizador'] !== (int)$user_id && !$is_admin) {
+    header("Location: animais.php?erro=sem_permissao");
+    exit();
+}
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nome_animal = trim($_POST['nome_animal']);
@@ -67,12 +73,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     if (empty($erro)) {
-        $sql_update = "UPDATE animal SET nome_animal = ?, especie = ?, raca = ?, idade = ?, sexo = ?, porte = ?, descricao = ?, localidade = ?, foto_animal = ?, adotado = ? WHERE id_animal = ? AND id_utilizador = ?";
+        $sql_update = "UPDATE animal SET nome_animal = ?, especie = ?, raca = ?, idade = ?, sexo = ?, porte = ?, descricao = ?, localidade = ?, foto_animal = ?, adotado = ? WHERE id_animal = ?";
         $stmt_update = $conn->prepare($sql_update);
-        $stmt_update->bind_param("sssssssssiii", $nome_animal, $especie, $raca, $idade, $sexo, $porte, $descricao, $localidade, $foto_animal, $adotado, $id_animal, $user_id);
+        $stmt_update->bind_param("sssssssssii", $nome_animal, $especie, $raca, $idade, $sexo, $porte, $descricao, $localidade, $foto_animal, $adotado, $id_animal);
 
         if ($stmt_update->execute()) {
-            header("Location: meus-animais.php?sucesso=editado");
+            $destino = $is_admin ? "animais.php?sucesso=editado" : "meus-animais.php?sucesso=editado";
+            header("Location: " . $destino);
             exit();
         } else {
             $erro = "Erro ao atualizar: " . $stmt_update->error;
@@ -177,7 +184,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <button type="submit" class="botao-login">Salvar</button>
             </form>
 
-            <a href="meus-animais.php" class="link-voltar">← Voltar</a>
+            <a href="<?php echo $is_admin ? 'animais.php' : 'meus-animais.php'; ?>" class="link-voltar">← Voltar</a>
         </div>
     </div>
 </body>

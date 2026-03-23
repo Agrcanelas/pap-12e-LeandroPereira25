@@ -24,6 +24,8 @@
                     echo 'Email ou password incorretos!';
                 } elseif($_GET['erro'] == 'vazio') {
                     echo 'Por favor, preencha todos os campos!';
+                } elseif($_GET['erro'] == 'inativo') {
+                    echo 'A sua conta foi desativada. Contacte o administrador.';
                 }
                 echo '</div>';
             }

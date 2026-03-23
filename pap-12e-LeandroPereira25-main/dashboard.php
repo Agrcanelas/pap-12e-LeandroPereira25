@@ -77,6 +77,9 @@ $data_registo = date('d/m/Y', strtotime($utilizador['data_registo']));
         <!-- Botões de Ação -->
         <div class="botoes-acao">
             <a href="editar-perfil.php" class="btn btn-primary">✏️ Editar Perfil</a>
+            <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
+                <a href="admin-dashboard.php" class="btn btn-secondary">🛠️ Painel Admin</a>
+            <?php endif; ?>
             <a href="logout.php" class="btn btn-danger">🚪 Terminar Sessão</a>
         </div>
     </div>

@@ -221,6 +221,16 @@ $resultado = $stmt->get_result();
             color: white;
         }
 
+        .btn-pesquisar {
+            background: #2196F3;
+            color: white;
+            max-width: 140px;
+        }
+
+        .btn-pesquisar:hover {
+            background: #1976D2;
+        }
+
         .btn-acao:hover {
             transform: scale(1.05);
         }
@@ -237,6 +247,16 @@ $resultado = $stmt->get_result();
             color: #2c3e50;
             font-size: 24px;
             margin-bottom: 15px;
+        }
+
+        .sem-animais p {
+            color: #666;
+            margin-bottom: 22px;
+        }
+
+        .sem-animais .btn-adicionar {
+            display: inline-block;
+            margin-top: 8px;
         }
 
         @media (max-width: 768px) {
@@ -268,7 +288,7 @@ $resultado = $stmt->get_result();
         <form class="filtros" method="GET">
             <label for="nome">Pesquisar por nome:</label>
             <input id="nome" type="search" name="nome" value="<?php echo htmlspecialchars($filtro_nome); ?>" placeholder="Ex: Bobi">
-            <button type="submit" class="btn-acao btn-editar" style="max-width: 140px;">Pesquisar</button>
+            <button type="submit" class="btn-acao btn-pesquisar">Pesquisar</button>
             <a href="meus-animais.php" style="color: #4CAF50; text-decoration: none; font-weight: 600;">Limpar Filtros</a>
         </form>
 

@@ -456,6 +456,7 @@
                                  alt="<?php echo htmlspecialchars($conversa['nome']); ?>" 
                                  class="conversa-foto">
                             <span class="conversa-nome"><?php echo htmlspecialchars($conversa['nome']); ?></span>
+                            <a href="perfil-utilizador.php?id=<?php echo (int) $conversa['outro_id']; ?>" style="font-size: 12px; color: #2D5016; text-decoration: none; font-weight: 600;">Ver perfil</a>
                             <?php
                                 $preview_msg = trim((string) ($conversa['mensagem'] ?? ''));
                                 if ($preview_msg === '' && !empty($conversa['anexo'])) {
@@ -502,10 +503,12 @@
             ?>
                 <!-- Header do Chat -->
                 <div class="chat-header">
-                    <img src="<?php echo htmlspecialchars($user_data['foto_perfil'] ?: 'uploads/default-avatar.png'); ?>" 
-                         alt="<?php echo htmlspecialchars($user_data['nome']); ?>">
+                    <a href="perfil-utilizador.php?id=<?php echo (int) $user_data['id_utilizador']; ?>" style="line-height: 0;">
+                        <img src="<?php echo htmlspecialchars($user_data['foto_perfil'] ?: 'uploads/default-avatar.png'); ?>" 
+                             alt="<?php echo htmlspecialchars($user_data['nome']); ?>">
+                    </a>
                     <div class="chat-header-info">
-                        <h3><?php echo htmlspecialchars($user_data['nome']); ?></h3>
+                        <h3><a href="perfil-utilizador.php?id=<?php echo (int) $user_data['id_utilizador']; ?>" style="color: inherit; text-decoration: none;"><?php echo htmlspecialchars($user_data['nome']); ?></a></h3>
                         <p>Online</p>
                     </div>
                 </div>

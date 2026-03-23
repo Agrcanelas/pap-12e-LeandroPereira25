@@ -20,4 +20,35 @@ $conn->set_charset("utf8mb4");
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
+
+// Sincronizar role do utilizador na sessão.
+// Isto evita erros de permissão quando a role muda na BD e o utilizador já estava autenticado.
+if (isset($_SESSION['logado']) && $_SESSION['logado'] === true && isset($_SESSION['user_id'])) {
+    $tem_coluna_role = false;
+    $check_role = $conn->query("SHOW COLUMNS FROM utilizador LIKE 'role'");
+    if ($check_role && $check_role->num_rows > 0) {
+        $tem_coluna_role = true;
+    }
+
+    if ($tem_coluna_role) {
+        $sql_role = "SELECT role FROM utilizador WHERE id_utilizador = ? LIMIT 1";
+        $stmt_role = $conn->prepare($sql_role);
+        if ($stmt_role) {
+            $id_utilizador = (int) $_SESSION['user_id'];
+            $stmt_role->bind_param("i", $id_utilizador);
+            $stmt_role->execute();
+            $resultado_role = $stmt_role->get_result();
+
+            if ($resultado_role && ($linha_role = $resultado_role->fetch_assoc())) {
+                $_SESSION['user_role'] = $linha_role['role'] ?? 'user';
+            } else {
+                $_SESSION['user_role'] = 'user';
+            }
+
+            $stmt_role->close();
+        }
+    } else {
+        $_SESSION['user_role'] = 'user';
+    }
+}
 ?>
