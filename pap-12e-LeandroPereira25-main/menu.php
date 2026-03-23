@@ -10,6 +10,7 @@
             <?php if(isset($_SESSION['logado'])): ?>
                 <li><a href="meus-animais.php" class="nav-link">Meus Animais</a></li>
                 <li><a href="meus-favoritos.php" class="nav-link">❤️ Favoritos</a></li>
+                <li><a href="candidaturas.php" class="nav-link">📋 Candidaturas</a></li>
                 <li><a href="mensagens.php" class="nav-link">💬 Mensagens</a></li>
    
                 <li>

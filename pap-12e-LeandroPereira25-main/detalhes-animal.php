@@ -1,4 +1,31 @@
-<?php require_once 'ligaDB.php'; ?>
+<?php require_once 'ligaDB.php';
+
+// Buscar avaliações do animal
+$id_animal = isset($_GET['id']) ? intval($_GET['id']) : 0;
+$sql_avaliacoes = "SELECT a.*, u.nome FROM avaliacoes a 
+                   JOIN utilizador u ON a.id_utilizador = u.id_utilizador 
+                   WHERE a.id_animal = ? 
+                   ORDER BY a.data_avaliacao DESC";
+$stmt_av = $conn->prepare($sql_avaliacoes);
+@$stmt_av->bind_param("i", $id_animal);
+@$stmt_av->execute();
+$avaliacoes = @$stmt_av->get_result();
+@$stmt_av->close();
+
+// Calcular média de classificação
+$media_classificacao = 0;
+$total_avaliacoes = 0;
+$sql_media = "SELECT AVG(classificacao) AS media, COUNT(*) AS total FROM avaliacoes WHERE id_animal = ?";
+$stmt_media = $conn->prepare($sql_media);
+@$stmt_media->bind_param("i", $id_animal);
+@$stmt_media->execute();
+$resultado_media = @$stmt_media->get_result();
+if ($resultado_media && $linha = $resultado_media->fetch_assoc()) {
+    $media_classificacao = round($linha['media'], 1);
+    $total_avaliacoes = $linha['total'];
+}
+@$stmt_media->close();
+?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -205,6 +232,110 @@
             flex-wrap: wrap;
         }
 
+        .avaliacoes-section {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+            margin-bottom: 40px;
+        }
+
+        .avaliacoes-header {
+            font-size: 28px;
+            color: #2D5016;
+            margin-bottom: 25px;
+            font-weight: 700;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .media-stars {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 24px;
+        }
+
+        .media-valor {
+            font-size: 20px;
+            color: #FFB84D;
+            font-weight: 700;
+        }
+
+        .total-avaliacoes {
+            font-size: 14px;
+            color: #999;
+        }
+
+        .formulario-avaliacao {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            border-left: 4px solid #FFB84D;
+        }
+
+        .stars-input {
+            display: flex;
+            gap: 10px;
+            margin: 15px 0;
+            font-size: 28px;
+        }
+
+        .star {
+            cursor: pointer;
+            color: #ddd;
+            transition: all 0.2s ease;
+        }
+
+        .star:hover, .star.active {
+            color: #FFB84D;
+            transform: scale(1.2);
+        }
+
+        .avaliacao-item {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border-left: 4px solid #66BB6A;
+        }
+
+        .avaliacao-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .avaliacao-autor {
+            font-weight: 600;
+            color: #2C2C2C;
+        }
+
+        .avaliacao-stars {
+            color: #FFB84D;
+            font-size: 16px;
+        }
+
+        .avaliacao-data {
+            font-size: 12px;
+            color: #999;
+        }
+
+        .avaliacao-texto {
+            color: #555;
+            line-height: 1.6;
+            margin-top: 10px;
+        }
+
+        .sem-avaliacoes {
+            text-align: center;
+            color: #999;
+            padding: 30px;
+        }
+
         @media (max-width: 768px) {
             .detalhes-header {
                 grid-template-columns: 1fr;
@@ -372,11 +503,117 @@
             </div>
         </div>
 
+        <!-- Seção de Avaliações -->
+        <div class="avaliacoes-section">
+            <div class="avaliacoes-header">
+                <span>⭐ Avaliações</span>
+                <div class="media-stars">
+                    <span class="media-stars-ico">★</span>
+                    <span class="media-valor"><?php echo $media_classificacao; ?></span>
+                    <span class="total-avaliacoes">(<?php echo $total_avaliacoes; ?> avaliações)</span>
+                </div>
+            </div>
+
+            <?php if(isset($_SESSION['logado']) && $_SESSION['logado']): ?>
+            <div class="formulario-avaliacao">
+                <h4 style="margin-top: 0; color: #2D5016;">Deixar Avaliação</h4>
+                <form method="POST" action="salvar-avaliacao.php" style="display: flex; flex-direction: column; gap: 15px;">
+                    <input type="hidden" name="id_animal" value="<?php echo $id_animal; ?>">
+                    
+                    <div>
+                        <label style="display: block; margin-bottom: 10px; font-weight: 600; color: #2C2C2C;">Classificação *</label>
+                        <div class="stars-input" id="stars-input">
+                            <span class="star" data-value="1">★</span>
+                            <span class="star" data-value="2">★</span>
+                            <span class="star" data-value="3">★</span>
+                            <span class="star" data-value="4">★</span>
+                            <span class="star" data-value="5">★</span>
+                        </div>
+                        <input type="hidden" id="classificacao" name="classificacao" value="0" required>
+                    </div>
+
+                    <div>
+                        <label for="comentario" style="display: block; margin-bottom: 10px; font-weight: 600; color: #2C2C2C;">Comentário (opcional)</label>
+                        <textarea id="comentario" name="comentario" rows="3" placeholder="Partilhe sua opinião..." style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; font-family: inherit; resize: vertical;"></textarea>
+                    </div>
+
+                    <button type="submit" class="btn-contact btn-email" style="align-self: flex-start;">Enviar Avaliação</button>
+                </form>
+            </div>
+            <?php endif; ?>
+
+            <?php if($avaliacoes && $avaliacoes->num_rows > 0): ?>
+                <?php while($avaliacao = $avaliacoes->fetch_assoc()): ?>
+                    <div class="avaliacao-item">
+                        <div class="avaliacao-header">
+                            <span class="avaliacao-autor"><?php echo htmlspecialchars($avaliacao['nome']); ?></span>
+                            <span class="avaliacao-stars"><?php echo str_repeat('★', $avaliacao['classificacao']) . str_repeat('☆', 5 - $avaliacao['classificacao']); ?></span>
+                        </div>
+                        <div class="avaliacao-data"><?php echo date('d/m/Y H:i', strtotime($avaliacao['data_avaliacao'])); ?></div>
+                        <?php if($avaliacao['comentario']): ?>
+                            <div class="avaliacao-texto"><?php echo htmlspecialchars($avaliacao['comentario']); ?></div>
+                        <?php endif; ?>
+                    </div>
+                <?php endwhile; ?>
+            <?php else: ?>
+                <div class="sem-avaliacoes">
+                    <p>Nenhuma avaliação ainda. Seja o primeiro a avaliar!</p>
+                </div>
+            <?php endif; ?>
+        </div>
+
         <!-- Botão Voltar -->
         <div class="botoes-acao">
             <a href="animais.php" class="btn-contact btn-voltar">← Voltar aos Animais</a>
         </div>
     </div>
+
+    <script>
+        // Interatividade dos stars de avaliação
+        const starsInput = document.getElementById('stars-input');
+        const classificacaoInput = document.getElementById('classificacao');
+
+        if (starsInput) {
+            const stars = starsInput.querySelectorAll('.star');
+            
+            stars.forEach(star => {
+                star.addEventListener('click', function() {
+                    const value = this.dataset.value;
+                    classificacaoInput.value = value;
+                    
+                    stars.forEach(s => {
+                        if (s.dataset.value <= value) {
+                            s.classList.add('active');
+                        } else {
+                            s.classList.remove('active');
+                        }
+                    });
+                });
+
+                star.addEventListener('mouseover', function() {
+                    const value = this.dataset.value;
+                    stars.forEach(s => {
+                        if (s.dataset.value <= value) {
+                            s.style.color = '#FFB84D';
+                        } else {
+                            s.style.color = '#ddd';
+                        }
+                    });
+                });
+            });
+
+            starsInput.addEventListener('mouseout', function() {
+                const active = classificacaoInput.value || 0;
+                stars.forEach(s => {
+                    if (s.dataset.value <= active) {
+                        s.style.color = '#FFB84D';
+                    } else {
+                        s.style.color = '#ddd';
+                    }
+                });
+            });
+        }
+    </script>
 
     <!-- Footer -->
     <footer class="rodape">
