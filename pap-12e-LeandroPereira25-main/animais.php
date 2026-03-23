@@ -3,6 +3,7 @@ require_once 'ligaDB.php';
 
 // Filtros
 $filtro_especie = isset($_GET['especie']) ? $_GET['especie'] : '';
+$filtro_nome = isset($_GET['nome']) ? trim($_GET['nome']) : '';
 
 // Query para buscar animais
 $sql = "SELECT a.*, u.nome as nome_dono, u.email as email_dono 
@@ -12,6 +13,10 @@ $sql = "SELECT a.*, u.nome as nome_dono, u.email as email_dono
 
 if ($filtro_especie) {
     $sql .= " AND a.especie = '" . $conn->real_escape_string($filtro_especie) . "'";
+}
+
+if ($filtro_nome !== '') {
+    $sql .= " AND a.nome_animal LIKE '%" . $conn->real_escape_string($filtro_nome) . "%'";
 }
 
 $sql .= " ORDER BY a.data_criacao DESC";
@@ -59,6 +64,8 @@ if (isset($_SESSION['logado']) && isset($_SESSION['user_id'])) {
 
     <!-- Filtros -->
     <form class="filtros" method="GET">
+        <label>Nome:</label>
+        <input type="search" name="nome" value="<?php echo htmlspecialchars($filtro_nome); ?>" placeholder="Ex: Max">
         <label>Espécie:</label>
         <select name="especie" onchange="this.form.submit()">
             <option value="">Todas</option>
@@ -66,6 +73,7 @@ if (isset($_SESSION['logado']) && isset($_SESSION['user_id'])) {
             <option value="Gato" <?php echo $filtro_especie == 'Gato' ? 'selected' : ''; ?>>Gatos</option>
             <option value="Outro" <?php echo $filtro_especie == 'Outro' ? 'selected' : ''; ?>>Outros</option>
         </select>
+        <button type="submit" class="btn-acao btn-ver" style="max-width: 140px;">Pesquisar</button>
         <a href="animais.php" style="color: #4CAF50; text-decoration: none; font-weight: 600;">Limpar Filtros</a>
     </form>
 

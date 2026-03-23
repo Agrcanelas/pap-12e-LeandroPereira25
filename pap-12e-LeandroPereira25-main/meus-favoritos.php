@@ -7,17 +7,28 @@ if (!isset($_SESSION['logado'])) {
 }
 
 $user_id = $_SESSION['user_id'];
+$filtro_nome = isset($_GET['nome']) ? trim($_GET['nome']) : '';
 
 // Buscar favoritos do utilizador
 $sql = "SELECT a.*, u.nome as nome_dono, u.email as email_dono
         FROM favoritos f
         JOIN animal a ON f.id_animal = a.id_animal
         JOIN utilizador u ON a.id_utilizador = u.id_utilizador
-        WHERE f.id_utilizador = ?
-        ORDER BY f.data_criacao DESC";
+    WHERE f.id_utilizador = ?";
+
+$tipos = "i";
+$parametros = [$user_id];
+
+if ($filtro_nome !== '') {
+    $sql .= " AND a.nome_animal LIKE ?";
+    $tipos .= "s";
+    $parametros[] = "%" . $filtro_nome . "%";
+}
+
+$sql .= " ORDER BY f.data_criacao DESC";
 
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("i", $user_id);
+$stmt->bind_param($tipos, ...$parametros);
 $stmt->execute();
 $resultado = $stmt->get_result();
 $stmt->close();
@@ -39,6 +50,13 @@ $stmt->close();
             <h1>❤️ Meus Favoritos</h1>
             <a href="animais.php" class="btn-adicionar">Ver Todos os Animais</a>
         </div>
+
+        <form class="filtros" method="GET">
+            <label for="nome">Nome:</label>
+            <input id="nome" type="search" name="nome" value="<?php echo htmlspecialchars($filtro_nome); ?>" placeholder="Ex: Mel">
+            <button type="submit" class="btn-acao btn-ver" style="max-width: 140px;">Pesquisar</button>
+            <a href="meus-favoritos.php" style="color: #4CAF50; text-decoration: none; font-weight: 600;">Limpar Filtros</a>
+        </form>
 
         <?php if ($resultado && $resultado->num_rows > 0): ?>
             <div class="grid-animais">

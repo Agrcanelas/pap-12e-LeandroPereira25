@@ -7,9 +7,21 @@ if (!isset($_SESSION['logado'])) {
 }
 
 $user_id = $_SESSION['user_id'];
-$sql = "SELECT * FROM animal WHERE id_utilizador = ? ORDER BY adotado ASC, data_criacao DESC";
+$filtro_nome = isset($_GET['nome']) ? trim($_GET['nome']) : '';
+
+$sql = "SELECT * FROM animal WHERE id_utilizador = ?";
+$tipos = "i";
+$parametros = [$user_id];
+
+if ($filtro_nome !== '') {
+    $sql .= " AND nome_animal LIKE ?";
+    $tipos .= "s";
+    $parametros[] = "%" . $filtro_nome . "%";
+}
+
+$sql .= " ORDER BY adotado ASC, data_criacao DESC";
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("i", $user_id);
+$stmt->bind_param($tipos, ...$parametros);
 $stmt->execute();
 $resultado = $stmt->get_result();
 ?>
@@ -60,6 +72,30 @@ $resultado = $stmt->get_result();
         .btn-adicionar:hover {
             background: #45a049;
             transform: translateY(-2px);
+        }
+
+        .filtros {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+            margin-bottom: 30px;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .filtros label {
+            color: #2c3e50;
+            font-weight: 600;
+        }
+
+        .filtros input[type="search"] {
+            padding: 8px 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            min-width: 220px;
         }
 
         .grid-animais {
@@ -228,6 +264,13 @@ $resultado = $stmt->get_result();
             <h1>🐾 Minhas Listagens</h1>
             <a href="adicionar-animal.php" class="btn-adicionar">+ Adicionar Animal</a>
         </div>
+
+        <form class="filtros" method="GET">
+            <label for="nome">Pesquisar por nome:</label>
+            <input id="nome" type="search" name="nome" value="<?php echo htmlspecialchars($filtro_nome); ?>" placeholder="Ex: Bobi">
+            <button type="submit" class="btn-acao btn-editar" style="max-width: 140px;">Pesquisar</button>
+            <a href="meus-animais.php" style="color: #4CAF50; text-decoration: none; font-weight: 600;">Limpar Filtros</a>
+        </form>
 
         <?php if($resultado->num_rows > 0): ?>
             <div class="grid-animais">
