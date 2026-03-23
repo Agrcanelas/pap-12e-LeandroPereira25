@@ -169,8 +169,11 @@ $is_own_profile = isset($_SESSION['user_id']) && (int) $_SESSION['user_id'] === 
 
         .perfil-animal-item img {
             width: 100%;
-            height: 140px;
-            object-fit: cover;
+            height: 170px;
+            object-fit: contain;
+            object-position: center;
+            display: block;
+            background: #f6f8fa;
         }
 
         .perfil-animal-item .conteudo {
