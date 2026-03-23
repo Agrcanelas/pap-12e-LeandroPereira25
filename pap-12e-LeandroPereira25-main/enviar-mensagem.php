@@ -37,10 +37,41 @@ if ($stmt_check->get_result()->num_rows === 0) {
     exit();
 }
 
-// Inserir mensagem
-$sql = "INSERT INTO mensagem (id_remetente, id_destinatario, mensagem, data_envio) VALUES (?, ?, ?, NOW())";
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("iis", $id_remetente, $id_destinatario, $msg_texto);
+// Processar anexo se enviado
+$anexo_caminho = null;
+if (isset($_FILES['anexo']) && $_FILES['anexo']['error'] === UPLOAD_ERR_OK) {
+    $arquivo = $_FILES['anexo'];
+    $extensao = strtolower(pathinfo($arquivo['name'], PATHINFO_EXTENSION));
+    $extensoes_permitidas = ['jpg', 'jpeg', 'png', 'gif'];
+
+    if (in_array($extensao, $extensoes_permitidas) && $arquivo['size'] <= 5000000) {
+        if (!file_exists('uploads/mensagens')) {
+            mkdir('uploads/mensagens', 0777, true);
+        }
+        $nome_novo = 'mensagem_' . time() . '_' . rand(1000,9999) . '.' . $extensao;
+        $caminho = 'uploads/mensagens/' . $nome_novo;
+        if (move_uploaded_file($arquivo['tmp_name'], $caminho)) {
+            $anexo_caminho = $caminho;
+        }
+    }
+}
+
+// Verificar se coluna anexo existe (compatibilidade com base antiga)
+$coluna_anexo_ok = false;
+$check_anexo = $conn->query("SHOW COLUMNS FROM mensagem LIKE 'anexo'");
+if ($check_anexo && $check_anexo->num_rows > 0) {
+    $coluna_anexo_ok = true;
+}
+
+if ($coluna_anexo_ok) {
+    $sql = "INSERT INTO mensagem (id_remetente, id_destinatario, mensagem, anexo, data_envio) VALUES (?, ?, ?, ?, NOW())";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("iiss", $id_remetente, $id_destinatario, $msg_texto, $anexo_caminho);
+} else {
+    $sql = "INSERT INTO mensagem (id_remetente, id_destinatario, mensagem, data_envio) VALUES (?, ?, ?, NOW())";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("iis", $id_remetente, $id_destinatario, $msg_texto);
+}
 
 if ($stmt->execute()) {
     header('Location: mensagens.php?com=' . $id_destinatario . '&sucesso=1');

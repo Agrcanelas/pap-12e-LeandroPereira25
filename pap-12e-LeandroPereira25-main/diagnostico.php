@@ -26,6 +26,17 @@ if ($check_result && $check_result->num_rows > 0) {
         echo $col['Field'] . " - " . $col['Type'] . "<br>";
     }
     echo "</pre>";
+
+    // Garante que existe campo de anexo na tabela existente
+    $coluna_anexo = $conn->query("SHOW COLUMNS FROM mensagem LIKE 'anexo'");
+    if ($coluna_anexo && $coluna_anexo->num_rows === 0) {
+        $alter = "ALTER TABLE mensagem ADD COLUMN anexo VARCHAR(500) DEFAULT NULL";
+        if ($conn->query($alter) === TRUE) {
+            echo "✅ Coluna anexo adicionada à tabela mensagem<br>";
+        } else {
+            echo "❌ Erro ao adicionar coluna anexo: " . $conn->error . "<br>";
+        }
+    }
 } else {
     echo "❌ Tabela NÃO existe<br>";
     echo "<p>Criando tabela...</p>";
@@ -35,6 +46,7 @@ if ($check_result && $check_result->num_rows > 0) {
         id_remetente INT NOT NULL,
         id_destinatario INT NOT NULL,
         conteudo TEXT NOT NULL,
+        anexo VARCHAR(500) DEFAULT NULL,
         data_envio TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         FOREIGN KEY (id_remetente) REFERENCES utilizador(id_utilizador) ON DELETE CASCADE,
         FOREIGN KEY (id_destinatario) REFERENCES utilizador(id_utilizador) ON DELETE CASCADE,

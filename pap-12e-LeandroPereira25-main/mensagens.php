@@ -356,7 +356,7 @@
                         ELSE m.id_remetente
                     END as outro_id,
                     u.nome, u.foto_perfil,
-                    m.mensagem, m.data_envio
+                    m.mensagem, m.anexo, m.data_envio
                 FROM mensagem m
                 JOIN utilizador u ON (
                     (m.id_remetente = ? AND u.id_utilizador = m.id_destinatario) OR
@@ -428,7 +428,7 @@
 
                 // Buscar todas as mensagens da conversa
                 if ($user_data) {
-                    $sql_msgs = "SELECT m.id_mensagem, m.id_remetente, m.id_destinatario, m.mensagem, m.data_envio, u.nome, u.foto_perfil 
+                    $sql_msgs = "SELECT m.id_mensagem, m.id_remetente, m.id_destinatario, m.mensagem, m.anexo, m.data_envio, u.nome, u.foto_perfil 
                                  FROM mensagem m
                                  JOIN utilizador u ON m.id_remetente = u.id_utilizador
                                  WHERE (m.id_remetente = ? AND m.id_destinatario = ?) 
@@ -466,6 +466,15 @@
                                 <?php endif; ?>
                                 <div>
                                     <div class="mensagem-conteudo"><?php echo nl2br(htmlspecialchars($msg['mensagem'])); ?></div>
+
+                                    <?php if (!empty($msg['anexo']) && file_exists($msg['anexo'])): ?>
+                                        <div style="margin-top: 8px;">
+                                            <a href="<?php echo htmlspecialchars($msg['anexo']); ?>" target="_blank" style="display: inline-block; max-width: 240px;">
+                                                <img src="<?php echo htmlspecialchars($msg['anexo']); ?>" alt="Anexo" style="max-width: 100%; border-radius: 10px; border: 1px solid #ccc;">
+                                            </a>
+                                        </div>
+                                    <?php endif; ?>
+
                                     <div class="mensagem-hora"><?php echo date('H:i', strtotime($msg['data_envio'])); ?></div>
                                 </div>
                             </div>
@@ -480,9 +489,10 @@
 
                 <!-- Input de Mensagem -->
                 <div class="chat-footer">
-                    <form method="POST" action="enviar-mensagem.php" class="chat-input-group" style="display: flex; gap: 10px; width: 100%;">
+                    <form method="POST" action="enviar-mensagem.php" class="chat-input-group" style="display: flex; gap: 10px; width: 100%;" enctype="multipart/form-data">
                         <input type="hidden" name="para_id" value="<?php echo $id_selecionado; ?>">
                         <input type="text" name="conteudo" placeholder="Escreva a sua mensagem..." required style="flex: 1;">
+                        <input type="file" name="anexo" accept="image/*" style="padding: 0 5px; border-radius: 8px; border: 1px solid #ddd;">
                         <button type="submit" class="btn-enviar-msg">Enviar</button>
                     </form>
                 </div>

@@ -1,0 +1,154 @@
+<?php
+require_once 'ligaDB.php';
+
+if (!isset($_SESSION['logado']) || !isset($_GET['id'])) {
+    header("Location: meus-animais.php");
+    exit();
+}
+
+$id_animal = intval($_GET['id']);
+$user_id = $_SESSION['user_id'];
+
+// Buscar Animal para pré-preencher
+$sql = "SELECT * FROM animal WHERE id_animal = ? AND id_utilizador = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("ii", $id_animal, $user_id);
+$stmt->execute();
+$result = $stmt->get_result();
+
+if ($result->num_rows === 0) {
+    header("Location: meus-animais.php?erro=animal_nao_encontrado");
+    exit();
+}
+
+$animal = $result->fetch_assoc();
+$stmt->close();
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $nome_animal = trim($_POST['nome_animal']);
+    $especie = $_POST['especie'];
+    $raca = trim($_POST['raca']);
+    $idade = trim($_POST['idade']);
+    $sexo = $_POST['sexo'];
+    $porte = $_POST['porte'];
+    $descricao = trim($_POST['descricao']);
+    $localidade = trim($_POST['localidade']);
+    $foto_animal = $animal['foto_animal'];
+
+    if (isset($_FILES['foto']) && $_FILES['foto']['error'] === UPLOAD_ERR_OK) {
+        $arquivo = $_FILES['foto'];
+        $extensao = strtolower(pathinfo($arquivo['name'], PATHINFO_EXTENSION));
+        $extensoes_permitidas = ['jpg', 'jpeg', 'png', 'gif'];
+
+        if (in_array($extensao, $extensoes_permitidas) && $arquivo['size'] <= 5000000) {
+            if (!file_exists('uploads')) {
+                mkdir('uploads', 0777, true);
+            }
+            $nome_novo = 'animal_' . time() . '.' . $extensao;
+            $caminho = 'uploads/' . $nome_novo;
+            if (move_uploaded_file($arquivo['tmp_name'], $caminho)) {
+                $foto_animal = $caminho;
+            }
+        }
+    }
+
+    $sql_update = "UPDATE animal SET nome_animal = ?, especie = ?, raca = ?, idade = ?, sexo = ?, porte = ?, descricao = ?, localidade = ?, foto_animal = ? WHERE id_animal = ? AND id_utilizador = ?";
+    $stmt_update = $conn->prepare($sql_update);
+    $stmt_update->bind_param("ssssssssiii", $nome_animal, $especie, $raca, $idade, $sexo, $porte, $descricao, $localidade, $foto_animal, $id_animal, $user_id);
+
+    if ($stmt_update->execute()) {
+        header("Location: meus-animais.php?sucesso=editado");
+        exit();
+    } else {
+        $erro = "Erro ao atualizar: " . $stmt_update->error;
+    }
+
+    $stmt_update->close();
+}
+
+?>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Animal - SAS</title>
+    <link rel="stylesheet" href="estilo-login.css">
+</head>
+<body>
+    <div class="container-login">
+        <div class="caixa-login" style="max-width: 600px;">
+            <h2>Editar Animal</h2>
+
+            <?php if (!empty($erro)): ?>
+                <div style="color: #e74c3c; margin-bottom: 15px;"><?php echo htmlspecialchars($erro); ?></div>
+            <?php endif; ?>
+
+            <form method="POST" enctype="multipart/form-data">
+                <div class="grupo-input">
+                    <label>Nome do Animal *</label>
+                    <input type="text" name="nome_animal" required value="<?php echo htmlspecialchars($animal['nome_animal']); ?>">
+                </div>
+
+                <div class="grupo-input">
+                    <label>Espécie *</label>
+                    <select name="especie" required>
+                        <option value="">Selecione...</option>
+                        <option value="Cão" <?php echo ($animal['especie'] === 'Cão') ? 'selected' : ''; ?>>Cão</option>
+                        <option value="Gato" <?php echo ($animal['especie'] === 'Gato') ? 'selected' : ''; ?>>Gato</option>
+                        <option value="Outro" <?php echo ($animal['especie'] === 'Outro') ? 'selected' : ''; ?>>Outro</option>
+                    </select>
+                </div>
+
+                <div class="grupo-input">
+                    <label>Raça</label>
+                    <input type="text" name="raca" value="<?php echo htmlspecialchars($animal['raca']); ?>">
+                </div>
+
+                <div class="grupo-input">
+                    <label>Idade</label>
+                    <input type="text" name="idade" value="<?php echo htmlspecialchars($animal['idade']); ?>">
+                </div>
+
+                <div class="grupo-input">
+                    <label>Sexo *</label>
+                    <select name="sexo" required>
+                        <option value="">Selecione...</option>
+                        <option value="Macho" <?php echo ($animal['sexo'] === 'Macho') ? 'selected' : ''; ?>>Macho</option>
+                        <option value="Fêmea" <?php echo ($animal['sexo'] === 'Fêmea') ? 'selected' : ''; ?>>Fêmea</option>
+                    </select>
+                </div>
+
+                <div class="grupo-input">
+                    <label>Porte</label>
+                    <select name="porte">
+                        <option value="">Selecione...</option>
+                        <option value="Pequeno" <?php echo ($animal['porte'] === 'Pequeno') ? 'selected' : ''; ?>>Pequeno</option>
+                        <option value="Médio" <?php echo ($animal['porte'] === 'Médio') ? 'selected' : ''; ?>>Médio</option>
+                        <option value="Grande" <?php echo ($animal['porte'] === 'Grande') ? 'selected' : ''; ?>>Grande</option>
+                    </select>
+                </div>
+
+                <div class="grupo-input">
+                    <label>Localidade</label>
+                    <input type="text" name="localidade" value="<?php echo htmlspecialchars($animal['localidade']); ?>">
+                </div>
+
+                <div class="grupo-input">
+                    <label>Descrição</label>
+                    <textarea name="descricao" rows="4"><?php echo htmlspecialchars($animal['descricao']); ?></textarea>
+                </div>
+
+                <div class="grupo-input">
+                    <label>Foto do Animal (opcional)</label>
+                    <input type="file" name="foto" accept="image/*">
+                </div>
+
+                <button type="submit" class="botao-login">Salvar</button>
+            </form>
+
+            <a href="meus-animais.php" class="link-voltar">← Voltar</a>
+        </div>
+    </div>
+</body>
+</html>
