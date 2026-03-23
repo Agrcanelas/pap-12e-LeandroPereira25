@@ -454,11 +454,11 @@ body {
 .estatistica-item {
     text-align: center;
     flex: 1;
-    min-width: 200px;
+    min-width: 220px;
     position: relative;
     z-index: 1;
     animation: fadeInUp 1s ease;
-    padding: 30px;
+    padding: 45px 30px;
     background: rgba(255, 255, 255, 0.1);
     border-radius: 15px;
     backdrop-filter: blur(10px);
@@ -467,21 +467,46 @@ body {
 }
 
 .estatistica-item:hover {
-    background: rgba(255, 255, 255, 0.15);
-    transform: translateY(-5px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    background: rgba(255, 255, 255, 0.18);
+    transform: translateY(-8px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25), inset 0 0 15px rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 .estatistica-item .numero {
-    font-size: 48px;
+    font-size: 56px;
     font-weight: bold;
     margin-bottom: 10px;
+    background: linear-gradient(135deg, #FFD700 0%, #FFF 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.icone-estatistica {
+    font-size: 48px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    background: rgba(255, 255, 255, 0.2);
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+.estatistica-item:hover .icone-estatistica {
+    background: rgba(255, 255, 255, 0.35);
+    transform: scale(1.15) rotate(10deg);
+    box-shadow: 0 0 25px rgba(255, 255, 255, 0.25);
 }
 
 .estatistica-item .label {
     font-size: 16px;
-    opacity: 0.9;
-    font-weight: 300;
+    opacity: 0.95;
+    font-weight: 400;
+    letter-spacing: 0.5px;
 }
 
 /* COMO AJUDAR */

@@ -17,6 +17,21 @@ if ($filtro_especie) {
 $sql .= " ORDER BY a.data_criacao DESC";
 
 $resultado = $conn->query($sql);
+
+// Buscar favoritos do utilizador logado
+$favoritos = array();
+if (isset($_SESSION['logado']) && isset($_SESSION['user_id'])) {
+    $sql_fav = "SELECT id_animal FROM favoritos WHERE id_utilizador = ?";
+    $stmt = $conn->prepare($sql_fav);
+    $stmt->bind_param("i", $_SESSION['user_id']);
+    $stmt->execute();
+    $resultado_fav = $stmt->get_result();
+    
+    while ($fav = $resultado_fav->fetch_assoc()) {
+        $favoritos[$fav['id_animal']] = true;
+    }
+    $stmt->close();
+}
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -89,8 +104,11 @@ $resultado = $conn->query($sql);
                         <div class="acoes-animal">
                             <button onclick="verDetalhes(<?php echo $animal['id_animal']; ?>)" class="btn-acao btn-ver">Ver Mais</button>
                             <?php if(isset($_SESSION['logado'])): ?>
-                                <button onclick="adicionarFavorito(<?php echo $animal['id_animal']; ?>)" class="btn-acao" style="background: #FF6B6B; color: white;">❤️</button>
-                                <button onclick="candidatar(<?php echo $animal['id_animal']; ?>)" class="btn-acao" style="background: #4ECDC4; color: white;">Candidatar</button>
+                                <?php if(isset($favoritos[$animal['id_animal']])): ?>
+                                    <button onclick="removerFavoritoAnimais(<?php echo $animal['id_animal']; ?>)" class="btn-checkmark" title="Remover dos favoritos">✓</button>
+                                <?php else: ?>
+                                    <a href="adicionar-favorito.php?id=<?php echo $animal['id_animal']; ?>" class="btn-acao btn-favorito" title="Adicionar aos favoritos">❤️ Favoritar</a>
+                                <?php endif; ?>
                             <?php endif; ?>
                             <?php if(isset($_SESSION['logado']) && $_SESSION['user_id'] == $animal['id_utilizador']): ?>
                                 <button onclick="editarAnimal(<?php echo $animal['id_animal']; ?>)" class="btn-acao btn-editar">Editar</button>
@@ -136,13 +154,10 @@ $resultado = $conn->query($sql);
         }
     }
 
-    function adicionarFavorito(id) {
-        window.location.href = 'adicionar-favorito.php?id=' + id;
+    function removerFavoritoAnimais(id) {
+        window.location.href = 'remover-favorito.php?id=' + id;
     }
 
-    function candidatar(id) {
-        window.location.href = 'formulario-candidatura.php?id=' + id;
-    }
 </script>
 
 </body>

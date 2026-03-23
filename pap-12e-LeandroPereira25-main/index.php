@@ -5,7 +5,6 @@ require_once 'ligaDB.php';
 $stats = [
     'total_adotados' => 0,
     'total_disponiveis' => 0,
-    'total_candidaturas' => 0,
     'especie_popular' => 'Cão'
 ];
 
@@ -21,13 +20,6 @@ $sql_disponiveis = "SELECT COUNT(*) AS total FROM animal WHERE adotado = 0";
 $resultado = $conn->query($sql_disponiveis);
 if ($resultado && $linha = $resultado->fetch_assoc()) {
     $stats['total_disponiveis'] = (int) $linha['total'];
-}
-
-// Total de candidaturas
-$sql_candidaturas = "SELECT COUNT(*) AS total FROM candidatura_adocao WHERE status = 'pendente'";
-$resultado = $conn->query($sql_candidaturas);
-if ($resultado && $linha = $resultado->fetch_assoc()) {
-    $stats['total_candidaturas'] = (int) $linha['total'];
 }
 
 // Espécie mais adotada
@@ -134,20 +126,19 @@ if ($resultado && $linha = $resultado->fetch_assoc()) {
     <!-- Estatísticas -->
     <section class="estatisticas">
         <div class="estatistica-item">
-            <div class="numero">500+</div>
-            <div class="label">Animais Salvos</div>
+            <div class="icone-estatistica">❤️</div>
+            <div class="numero"><?php echo $stats['total_adotados'] * 2; ?>+</div>
+            <div class="label">Vidas Transformadas</div>
         </div>
         <div class="estatistica-item">
+            <div class="icone-estatistica">🎉</div>
             <div class="numero"><?php echo $stats['total_adotados']; ?>+</div>
             <div class="label">Animais Adotados</div>
         </div>
         <div class="estatistica-item">
+            <div class="icone-estatistica">🐾</div>
             <div class="numero"><?php echo $stats['total_disponiveis']; ?></div>
             <div class="label">Disponíveis Agora</div>
-        </div>
-        <div class="estatistica-item">
-            <div class="numero"><?php echo $stats['total_candidaturas']; ?></div>
-            <div class="label">Candidaturas Ativas</div>
         </div>
     </section>
 
@@ -158,10 +149,10 @@ if ($resultado && $linha = $resultado->fetch_assoc()) {
         
         <div class="cards-container">
             <div class="card">
-                <div class="card-icone">🏠</div>
-                <h3>Adotar</h3>
-                <p>Dá um lar amoroso a um animal que precisa. A adoção salva vidas e traz alegria para casa.</p>
-                <a href="#" class="botao-card">Conhecer Animais</a>
+                <div class="card-icone">🎉</div>
+                <h3>Animais Adotados</h3>
+                <p>Celebramos cada final feliz. Acompanha a histórias de sucesso dos animais já adotados.</p>
+                <a href="animais-adotados.php" class="botao-card">Ver Resultados</a>
             </div>
 
             <div class="card">
@@ -172,10 +163,10 @@ if ($resultado && $linha = $resultado->fetch_assoc()) {
             </div>
 
             <div class="card">
-                <div class="card-icone">🎉</div>
-                <h3>Animais Adotados</h3>
-                <p>Celebramos cada final feliz. Acompanha o impacto do projeto através do número de adoções concluídas.</p>
-                <a href="animais-adotados.php" class="botao-card">Ver Resultados</a>
+                <div class="card-icone">🐾</div>
+                <h3>Adotar</h3>
+                <p>Encontra o companheiro perfeito. Percorre a nossa listagem de animais disponíveis para adoção.</p>
+                <a href="animais.php" class="botao-card">Ver Animais</a>
             </div>
 
             <div class="card">
