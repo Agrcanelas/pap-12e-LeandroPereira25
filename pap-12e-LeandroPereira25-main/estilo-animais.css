@@ -175,12 +175,23 @@
 
 .acoes-animal {
     display: flex;
-    gap: 10px;
+    flex-wrap: wrap;
+    align-items: stretch;
+    gap: 8px;
     margin-top: 15px;
 }
 
+.acoes-animal > * {
+    flex: 1 1 calc(50% - 8px);
+    min-width: 100px;
+}
+
+.acoes-animal form {
+    margin: 0;
+}
+
 .btn-acao {
-    flex: 1;
+    width: 100%;
     padding: 8px;
     border: none;
     border-radius: 8px;
@@ -211,25 +222,25 @@
 }
 
 .btn-favorito {
-    background: linear-gradient(135deg, #FF6B6B 0%, #FF8E8E 100%);
+    background: linear-gradient(135deg, #E53935 0%, #EF5350 100%);
     color: white;
     transition: all 0.3s ease;
 }
 
 .btn-favorito:hover {
-    background: linear-gradient(135deg, #FF5252 0%, #FF7575 100%);
+    background: linear-gradient(135deg, #C62828 0%, #E53935 100%);
     transform: scale(1.05);
 }
 
 .btn-checkmark {
-    width: 44px;
-    height: 44px;
-    padding: 0;
+    width: 100%;
+    height: auto;
+    padding: 8px;
     background: #E53935;
     color: white;
     border: none;
     border-radius: 8px;
-    font-size: 24px;
+    font-size: 20px;
     font-weight: 700;
     cursor: pointer;
     transition: all 0.3s ease;

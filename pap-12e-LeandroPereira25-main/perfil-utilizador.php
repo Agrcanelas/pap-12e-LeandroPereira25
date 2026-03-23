@@ -62,7 +62,6 @@ if ($result_animais) {
 }
 $stmt_animais->close();
 
-$data_registo = !empty($perfil['data_registo']) ? date('d/m/Y', strtotime($perfil['data_registo'])) : '-';
 $ativo = !isset($perfil['ativo']) || (int) $perfil['ativo'] === 1;
 $is_admin = isset($_SESSION['logado']) && $_SESSION['logado'] === true && isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin';
 $is_own_profile = isset($_SESSION['user_id']) && (int) $_SESSION['user_id'] === (int) $perfil['id_utilizador'];
@@ -231,7 +230,6 @@ $is_own_profile = isset($_SESSION['user_id']) && (int) $_SESSION['user_id'] === 
                     <p style="margin: 6px 0; color: #666;">📱 <?php echo htmlspecialchars($perfil['telefone']); ?></p>
                 <?php endif; ?>
                 <div class="perfil-publico-badges">
-                    <span class="badge-mini">Membro desde <?php echo $data_registo; ?></span>
                     <?php if (!$ativo): ?>
                         <span class="badge-mini badge-inativo">Conta inativa</span>
                     <?php endif; ?>

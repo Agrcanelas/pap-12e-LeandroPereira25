@@ -7,13 +7,14 @@ if (!isset($_SESSION['logado']) || $_SESSION['logado'] !== true) {
     exit();
 }
 
-// Verificar ID do animal
-if (!isset($_GET['id']) || empty($_GET['id'])) {
+// Verificar ID do animal (aceita POST e mantém compatibilidade com GET)
+$id_animal_raw = $_POST['id'] ?? $_GET['id'] ?? null;
+if ($id_animal_raw === null || $id_animal_raw === '') {
     header("Location: animais.php?erro=id_invalido");
     exit();
 }
 
-$id_animal = intval($_GET['id']);
+$id_animal = intval($id_animal_raw);
 $user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
 
 // Verificar se user_id está definido
@@ -43,7 +44,7 @@ $resultado_fav = $check_fav->get_result();
 
 if ($resultado_fav->num_rows > 0) {
     // Já está nos favoritos - redirecionar
-    header("Location: meus-favoritos.php?msg=ja_existe");
+    header("Location: animais.php?msg=ja_existe");
     exit();
 }
 
@@ -61,7 +62,7 @@ if (!$stmt) {
 $stmt->bind_param("ii", $user_id, $id_animal);
 
 if ($stmt->execute()) {
-    header("Location: meus-favoritos.php?sucesso=1");
+    header("Location: animais.php?sucesso=favorito");
 } else {
     header("Location: animais.php?erro=favorito_erro");
 }

@@ -107,14 +107,14 @@ if ($resultado && $linha = $resultado->fetch_assoc()) {
     </script>
 
     <!-- Seção de Conteúdo -->
-    <section class="conteudo">
+    <section class="conteudo" id="sobre-nos">
         <div class="texto">
             <h2>Sobre Nós</h2>
             <p>
-                A Save Animal Souls é uma organização dedicada ao resgate, reabilitação e adoção de animais abandonados. 
-                Acredito que cada vida tem valor e merece uma segunda oportunidade. Através do trabalho de voluntários 
-                apaixonados e do apoio da comunidade, já transformámos centenas de vidas - tanto de animais quanto das 
-                famílias que os adotam. Junte-se a mim nesta missão!
+                A Save Animal Souls é uma organização non-profit dedicada à reabilitação de animais abandonados. 
+                Acreditamos que cada vida tem valor e merece uma segunda oportunidade. Através deste site, conectamos animais necessitados com pessoas que podem oferecer um lar amoroso. Com o apoio da comunidade
+                apaixonados e do apoio da comunidade, esperemos transformar centenas de vidas - tanto de animais quanto das 
+                famílias que os adotam. Junte-se a nós nesta missão!
             </p>
         </div>
 
@@ -143,7 +143,7 @@ if ($resultado && $linha = $resultado->fetch_assoc()) {
     </section>
 
     <!-- Como Ajudar -->
-    <section class="como-ajudar">
+    <section class="como-ajudar" id="como-ajudar">
         <h2 class="titulo-secao">Como Podes Ajudar</h2>
         <p class="subtitulo-secao">Existem várias formas de fazer a diferença na vida de um animal</p>
         
@@ -159,7 +159,7 @@ if ($resultado && $linha = $resultado->fetch_assoc()) {
                 <div class="card-icone">💚</div>
                 <h3>Doar</h3>
                 <p>Contribuições financeiras ajudam-nos a continuar o trabalho de resgate, tratamento veterinário e cuidados.</p>
-                <a href="#" class="botao-card">Fazer Doação</a>
+                <a href="funcionalidade-indisponivel.php" class="botao-card">Fazer Doação</a>
             </div>
 
             <div class="card">
@@ -173,42 +173,42 @@ if ($resultado && $linha = $resultado->fetch_assoc()) {
                 <div class="card-icone">📢</div>
                 <h3>Partilhar</h3>
                 <p>Ajuda a espalhar a palavra! Partilha as nossas histórias e animais disponíveis para adoção.</p>
-                <a href="#" class="botao-card">Partilhar Agora</a>
+                <a href="animais.php" class="botao-card">Partilhar Agora</a>
             </div>
         </div>
     </section>
 
     <!-- Footer -->
-    <footer class="rodape">
+    <footer class="rodape" id="contacto">
         <div class="rodape-conteudo">
             <div class="rodape-coluna">
                 <h3>Save Animal Souls</h3>
                 <p>Dedicados a salvar e proteger animais desde 2025.</p>
                 <div class="redes-sociais">
-                    <a href="#" title="Facebook">📘</a>
-                    <a href="#" title="Instagram">📷</a>
-                    <a href="#" title="Twitter">🐦</a>
-                    <a href="#" title="Email">✉️</a>
+                    <a href="animais.php" title="Facebook">📘</a>
+                    <a href="animais-adotados.php" title="Instagram">📷</a>
+                    <a href="meus-animais.php" title="Twitter">🐦</a>
+                    <a href="contacto.php" title="Email">✉️</a>
                 </div>
             </div>
 
             <div class="rodape-coluna">
                 <h4>Links Rápidos</h4>
                 <ul>
-                    <li><a href="#">Início</a></li>
-                    <li><a href="#">Sobre Nós</a></li>
-                    <li><a href="#">Adotar</a></li>
-                    <li><a href="#">Contacto</a></li>
+                    <li><a href="index.php">Início</a></li>
+                    <li><a href="#sobre-nos">Sobre Nós</a></li>
+                    <li><a href="animais.php">Adotar</a></li>
+                    <li><a href="contacto.php">Contacto</a></li>
                 </ul>
             </div>
 
             <div class="rodape-coluna">
                 <h4>Como Ajudar</h4>
                 <ul>
-                    <li><a href="#">Adotar um Animal</a></li>
-                    <li><a href="">Forma de ajudar</a></li>
-                    <li><a href="#">Ser Voluntário</a></li>
-                    <li><a href="#">Apadrinhar</a></li>
+                    <li><a href="animais.php">Adotar um Animal</a></li>
+                    <li><a href="funcionalidade-indisponivel.php">Doar Agora</a></li>
+                    <li><a href="animais-adotados.php">Ver Histórias de Sucesso</a></li>
+                    <li><a href="apadrinhar.php">Apadrinhar</a></li>
                 </ul>
             </div>
 

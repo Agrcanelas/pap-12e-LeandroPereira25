@@ -116,7 +116,10 @@ if (isset($_SESSION['logado']) && isset($_SESSION['user_id'])) {
                                 <?php if(isset($favoritos[$animal['id_animal']])): ?>
                                     <button onclick="removerFavoritoAnimais(<?php echo $animal['id_animal']; ?>)" class="btn-checkmark" title="Remover dos favoritos">✓</button>
                                 <?php else: ?>
-                                    <a href="adicionar-favorito.php?id=<?php echo $animal['id_animal']; ?>" class="btn-acao btn-favorito" title="Adicionar aos favoritos">❤️ Favoritar</a>
+                                    <form method="POST" action="adicionar-favorito.php" style="margin: 0; flex: 1;">
+                                        <input type="hidden" name="id" value="<?php echo (int) $animal['id_animal']; ?>">
+                                        <button type="submit" class="btn-acao btn-favorito" title="Adicionar aos favoritos" style="width: 100%;">❤️ Favoritar</button>
+                                    </form>
                                 <?php endif; ?>
                             <?php endif; ?>
                             <?php if(isset($_SESSION['logado']) && ($_SESSION['user_id'] == $animal['id_utilizador'] || $is_admin)): ?>
