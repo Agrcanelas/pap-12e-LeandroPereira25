@@ -452,7 +452,7 @@
                 <?php foreach ($conversas_unicas as $conversa): ?>
                     <a href="?com=<?php echo $conversa['outro_id']; ?>" style="text-decoration: none;">
                         <div class="conversa-item <?php echo ($id_selecionado == $conversa['outro_id']) ? 'active' : ''; ?>">
-                            <img src="<?php echo htmlspecialchars($conversa['foto_perfil'] ?: 'uploads/default-avatar.png'); ?>" 
+                               <img src="<?php echo htmlspecialchars(resolve_profile_image($conversa['foto_perfil'] ?? null)); ?>" 
                                  alt="<?php echo htmlspecialchars($conversa['nome']); ?>" 
                                  class="conversa-foto">
                             <span class="conversa-nome"><?php echo htmlspecialchars($conversa['nome']); ?></span>
@@ -504,7 +504,7 @@
                 <!-- Header do Chat -->
                 <div class="chat-header">
                     <a href="perfil-utilizador.php?id=<?php echo (int) $user_data['id_utilizador']; ?>" style="line-height: 0;">
-                        <img src="<?php echo htmlspecialchars($user_data['foto_perfil'] ?: 'uploads/default-avatar.png'); ?>" 
+                            <img src="<?php echo htmlspecialchars(resolve_profile_image($user_data['foto_perfil'] ?? null)); ?>" 
                              alt="<?php echo htmlspecialchars($user_data['nome']); ?>">
                     </a>
                     <div class="chat-header-info">
@@ -521,7 +521,7 @@
                         ?>
                             <div class="mensagem <?php echo $é_remetente ? 'sent' : 'received'; ?>">
                                 <?php if (!$é_remetente): ?>
-                                    <img src="<?php echo htmlspecialchars($msg['foto_perfil'] ?: 'uploads/default-avatar.png'); ?>" 
+                                     <img src="<?php echo htmlspecialchars(resolve_profile_image($msg['foto_perfil'] ?? null)); ?>" 
                                          alt="<?php echo htmlspecialchars($msg['nome']); ?>" 
                                          class="mensagem-foto">
                                 <?php endif; ?>

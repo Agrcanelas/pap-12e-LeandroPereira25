@@ -20,7 +20,7 @@
                     <a href="dashboard.php" class="nav-profile">
                         <?php 
                             // Usar foto da sessão ou padrão
-                            $foto_perfil = $_SESSION['foto_perfil'] ?? 'uploads/default-avatar.png';
+                            $foto_perfil = resolve_profile_image($_SESSION['foto_perfil'] ?? null);
                         ?>
                         <img src="<?php echo htmlspecialchars($foto_perfil); ?>" alt="Perfil" class="nav-profile-img">
                     </a>

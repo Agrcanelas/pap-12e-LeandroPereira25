@@ -32,7 +32,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['user_id'] = $utilizador['id_utilizador'];
             $_SESSION['user_nome'] = $utilizador['nome'];
             $_SESSION['user_email'] = $utilizador['email'];
-            $_SESSION['foto_perfil'] = $utilizador['foto_perfil'] ?? 'uploads/default-avatar.png';
+            $_SESSION['foto_perfil'] = resolve_profile_image($utilizador['foto_perfil'] ?? null);
             $_SESSION['user_role'] = $utilizador['role'] ?? 'user';
             $_SESSION['logado'] = true;
             

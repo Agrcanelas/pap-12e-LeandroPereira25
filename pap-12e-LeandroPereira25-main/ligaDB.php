@@ -4,6 +4,8 @@ define('DB_HOST', 'localhost');     // Endereço do servidor (normalmente localh
 define('DB_USER', 'root');          // Nome de utilizador MySQL
 define('DB_PASS', '');              // Password MySQL (vazio por defeito no XAMPP/WAMP)
 define('DB_NAME', 'sas_database');  // Nome da base de dados
+define('DEFAULT_PROFILE_IMAGE', 'uploads/default-avatar.png'); // Troca aqui para a imagem default que quiseres
+define('DEFAULT_ANIMAL_IMAGE', 'uploads/default-image.jpg'); // Imagem default para animais
 
 // Criar conexão
 $conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
@@ -19,6 +21,50 @@ $conn->set_charset("utf8mb4");
 // Iniciar sessão se ainda não estiver iniciada
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
+}
+
+if (!function_exists('resolve_profile_image')) {
+    function resolve_profile_image(?string $foto): string
+    {
+        $default = DEFAULT_PROFILE_IMAGE;
+        $foto = trim((string) $foto);
+
+        if ($foto === '') {
+            return $default;
+        }
+
+        // Se for URL externa válida, mantém.
+        if (filter_var($foto, FILTER_VALIDATE_URL)) {
+            return $foto;
+        }
+
+        $normalizado = str_replace(['/', '\\'], DIRECTORY_SEPARATOR, $foto);
+        $caminho_local = __DIR__ . DIRECTORY_SEPARATOR . ltrim($normalizado, DIRECTORY_SEPARATOR);
+
+        return is_file($caminho_local) ? $foto : $default;
+    }
+}
+
+if (!function_exists('resolve_animal_image')) {
+    function resolve_animal_image(?string $foto): string
+    {
+        $default = DEFAULT_ANIMAL_IMAGE;
+        $foto = trim((string) $foto);
+
+        if ($foto === '') {
+            return $default;
+        }
+
+        // Se for URL externa válida, mantém.
+        if (filter_var($foto, FILTER_VALIDATE_URL)) {
+            return $foto;
+        }
+
+        $normalizado = str_replace(['/', '\\'], DIRECTORY_SEPARATOR, $foto);
+        $caminho_local = __DIR__ . DIRECTORY_SEPARATOR . ltrim($normalizado, DIRECTORY_SEPARATOR);
+
+        return is_file($caminho_local) ? $foto : $default;
+    }
 }
 
 // Sincronizar role do utilizador na sessão.

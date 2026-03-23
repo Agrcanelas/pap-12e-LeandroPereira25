@@ -277,7 +277,7 @@
         <div class="detalhes-header">
             <!-- Foto -->
             <div>
-                <img src="<?php echo htmlspecialchars($animal['foto_animal'] ?: 'uploads/animal-default.jpg'); ?>" 
+                <img src="<?php echo htmlspecialchars(resolve_animal_image($animal['foto_animal'])); ?>" 
                      alt="<?php echo htmlspecialchars($animal['nome_animal']); ?>" 
                      class="foto-detalhes">
             </div>
@@ -348,7 +348,7 @@
             
             <div class="dono-info">
                 <a href="perfil-utilizador.php?id=<?php echo (int) $animal['id_utilizador']; ?>">
-                    <img src="<?php echo htmlspecialchars($animal['foto_perfil'] ?: 'uploads/default-avatar.png'); ?>" 
+                    <img src="<?php echo htmlspecialchars(resolve_profile_image($animal['foto_perfil'] ?? null)); ?>" 
                          alt="<?php echo htmlspecialchars($animal['nome_dono']); ?>" 
                          class="dono-foto">
                 </a>

@@ -20,7 +20,7 @@ $nome = $utilizador['nome'];
 $email = $utilizador['email'];
 $telefone = $utilizador['telefone'];
 $biografia = $utilizador['biografia'];
-$foto_perfil = $utilizador['foto_perfil'] ?? 'uploads/default-avatar.png';
+$foto_perfil = resolve_profile_image($utilizador['foto_perfil'] ?? null);
 $data_registo = date('d/m/Y', strtotime($utilizador['data_registo']));
 ?>
 <!DOCTYPE html>

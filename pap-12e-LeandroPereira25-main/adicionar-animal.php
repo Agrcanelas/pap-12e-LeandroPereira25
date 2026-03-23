@@ -18,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $id_utilizador = $_SESSION['user_id'];
     
     // Upload da foto
-    $foto_animal = 'uploads/animal-default.jpg';
+    $foto_animal = 'uploads/default-image.jpg';
     if(isset($_FILES['foto']) && $_FILES['foto']['error'] == 0) {
         $arquivo = $_FILES['foto'];
         $extensao = strtolower(pathinfo($arquivo['name'], PATHINFO_EXTENSION));

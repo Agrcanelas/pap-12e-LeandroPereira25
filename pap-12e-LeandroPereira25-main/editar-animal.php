@@ -59,7 +59,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (move_uploaded_file($arquivo['tmp_name'], $caminho)) {
                 // Remove foto antiga local (exceto imagem padrão).
                 if (!empty($animal['foto_animal']) &&
-                    $animal['foto_animal'] !== 'uploads/animal-default.jpg' &&
+                    $animal['foto_animal'] !== 'uploads/default-image.jpg' &&
                     is_file($animal['foto_animal'])) {
                     @unlink($animal['foto_animal']);
                 }
@@ -173,7 +173,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <div class="grupo-input">
                     <label>Foto atual</label>
                     <div style="margin-bottom: 10px;">
-                        <img src="<?php echo htmlspecialchars($animal['foto_animal'] ?: 'uploads/animal-default.jpg'); ?>"
+                        <img src="<?php echo htmlspecialchars(resolve_animal_image($animal['foto_animal'])); ?>"
                              alt="Foto atual do animal"
                              style="width: 140px; height: 140px; object-fit: cover; border-radius: 10px; border: 1px solid #ddd;">
                     </div>

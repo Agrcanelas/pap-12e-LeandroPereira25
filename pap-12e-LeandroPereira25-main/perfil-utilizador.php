@@ -220,7 +220,7 @@ $is_own_profile = isset($_SESSION['user_id']) && (int) $_SESSION['user_id'] === 
         <?php endif; ?>
 
         <div class="perfil-publico-header">
-            <img src="<?php echo htmlspecialchars($perfil['foto_perfil'] ?: 'uploads/default-avatar.png'); ?>" alt="<?php echo htmlspecialchars($perfil['nome']); ?>" class="perfil-publico-foto">
+            <img src="<?php echo htmlspecialchars(resolve_profile_image($perfil['foto_perfil'] ?? null)); ?>" alt="<?php echo htmlspecialchars($perfil['nome']); ?>" class="perfil-publico-foto">
             <div>
                 <h1 style="margin: 0; color: #2c3e50;"><?php echo htmlspecialchars($perfil['nome']); ?></h1>
                 <p style="margin: 6px 0; color: #666;"><?php echo htmlspecialchars($perfil['email']); ?></p>
@@ -284,7 +284,7 @@ $is_own_profile = isset($_SESSION['user_id']) && (int) $_SESSION['user_id'] === 
                 <div class="perfil-animais-lista">
                     <?php foreach ($animais as $animal): ?>
                         <a href="detalhes-animal.php?id=<?php echo (int) $animal['id_animal']; ?>" class="perfil-animal-item">
-                            <img src="<?php echo htmlspecialchars($animal['foto_animal'] ?: 'uploads/animal-default.jpg'); ?>" alt="<?php echo htmlspecialchars($animal['nome_animal']); ?>">
+                            <img src="<?php echo htmlspecialchars(resolve_animal_image($animal['foto_animal'])); ?>" alt="<?php echo htmlspecialchars($animal['nome_animal']); ?>">
                             <div class="conteudo">
                                 <strong><?php echo htmlspecialchars($animal['nome_animal']); ?></strong>
                                 <div class="estado"><?php echo htmlspecialchars($animal['especie']); ?> • <?php echo ((int)$animal['adotado'] === 1) ? 'Adotado' : 'Disponível'; ?></div>

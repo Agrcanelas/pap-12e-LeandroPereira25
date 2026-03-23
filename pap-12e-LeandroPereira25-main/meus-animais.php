@@ -296,7 +296,7 @@ $resultado = $stmt->get_result();
             <div class="grid-animais">
                 <?php while($animal = $resultado->fetch_assoc()): ?>
                     <div class="card-animal <?php echo $animal['adotado'] ? 'adotado' : ''; ?>">
-                        <img src="<?php echo htmlspecialchars($animal['foto_animal'] ?: 'uploads/animal-default.jpg'); ?>" 
+                        <img src="<?php echo htmlspecialchars(resolve_animal_image($animal['foto_animal'])); ?>" 
                              alt="<?php echo htmlspecialchars($animal['nome_animal']); ?>" 
                              class="foto-animal">
                         
