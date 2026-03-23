@@ -6,8 +6,10 @@
         <ul class="nav-menu">
             <li><a href="index.php" class="nav-link">Início</a></li>
             <li><a href="animais.php" class="nav-link">Animais</a></li>
+            <li><a href="animais-adotados.php" class="nav-link">Adotados</a></li>
             <?php if(isset($_SESSION['logado'])): ?>
                 <li><a href="meus-animais.php" class="nav-link">Meus Animais</a></li>
+                <li><a href="meus-favoritos.php" class="nav-link">❤️ Favoritos</a></li>
                 <li><a href="mensagens.php" class="nav-link">💬 Mensagens</a></li>
    
                 <li>

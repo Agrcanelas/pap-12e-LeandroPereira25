@@ -1,4 +1,42 @@
-<?php require_once 'ligaDB.php'; ?>
+<?php
+require_once 'ligaDB.php';
+
+// Estatísticas melhoradas
+$stats = [
+    'total_adotados' => 0,
+    'total_disponiveis' => 0,
+    'total_candidaturas' => 0,
+    'especie_popular' => 'Cão'
+];
+
+// Total adotados
+$sql_adotados = "SELECT COUNT(*) AS total FROM animal WHERE adotado = 1";
+$resultado = $conn->query($sql_adotados);
+if ($resultado && $linha = $resultado->fetch_assoc()) {
+    $stats['total_adotados'] = (int) $linha['total'];
+}
+
+// Total disponíveis
+$sql_disponiveis = "SELECT COUNT(*) AS total FROM animal WHERE adotado = 0";
+$resultado = $conn->query($sql_disponiveis);
+if ($resultado && $linha = $resultado->fetch_assoc()) {
+    $stats['total_disponiveis'] = (int) $linha['total'];
+}
+
+// Total de candidaturas
+$sql_candidaturas = "SELECT COUNT(*) AS total FROM candidatura_adocao WHERE status = 'pendente'";
+$resultado = $conn->query($sql_candidaturas);
+if ($resultado && $linha = $resultado->fetch_assoc()) {
+    $stats['total_candidaturas'] = (int) $linha['total'];
+}
+
+// Espécie mais adotada
+$sql_popular = "SELECT especie, COUNT(*) AS total FROM animal WHERE adotado = 1 GROUP BY especie ORDER BY total DESC LIMIT 1";
+$resultado = $conn->query($sql_popular);
+if ($resultado && $linha = $resultado->fetch_assoc()) {
+    $stats['especie_popular'] = htmlspecialchars($linha['especie']);
+}
+?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -100,10 +138,17 @@
             <div class="label">Animais Salvos</div>
         </div>
         <div class="estatistica-item">
-            <div class="numero">80+</div>
-            <div class="label">Voluntários Ativos</div>
+            <div class="numero"><?php echo $stats['total_adotados']; ?>+</div>
+            <div class="label">Animais Adotados</div>
         </div>
-        
+        <div class="estatistica-item">
+            <div class="numero"><?php echo $stats['total_disponiveis']; ?></div>
+            <div class="label">Disponíveis Agora</div>
+        </div>
+        <div class="estatistica-item">
+            <div class="numero"><?php echo $stats['total_candidaturas']; ?></div>
+            <div class="label">Candidaturas Ativas</div>
+        </div>
     </section>
 
     <!-- Como Ajudar -->
@@ -127,10 +172,10 @@
             </div>
 
             <div class="card">
-                <div class="card-icone">🤝</div>
-                <h3>Voluntariar</h3>
-                <p>O teu tempo e dedicação são preciosos. Junta-te à nossa equipa e ajuda diretamente os animais.</p>
-                <a href="#" class="botao-card">Ser Voluntário</a>
+                <div class="card-icone">🎉</div>
+                <h3>Animais Adotados</h3>
+                <p>Celebramos cada final feliz. Acompanha o impacto do projeto através do número de adoções concluídas.</p>
+                <a href="animais-adotados.php" class="botao-card">Ver Resultados</a>
             </div>
 
             <div class="card">

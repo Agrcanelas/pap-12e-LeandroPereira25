@@ -33,6 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $porte = $_POST['porte'];
     $descricao = trim($_POST['descricao']);
     $localidade = trim($_POST['localidade']);
+    $adotado = (isset($_POST['adotado']) && $_POST['adotado'] === '1') ? 1 : 0;
     $foto_animal = $animal['foto_animal'];
 
     if (isset($_FILES['foto']) && $_FILES['foto']['error'] === UPLOAD_ERR_OK) {
@@ -44,26 +45,41 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (!file_exists('uploads')) {
                 mkdir('uploads', 0777, true);
             }
-            $nome_novo = 'animal_' . time() . '.' . $extensao;
+
+            // Nome único para evitar cache e colisões de ficheiros.
+            $nome_novo = 'animal_' . time() . '_' . bin2hex(random_bytes(4)) . '.' . $extensao;
             $caminho = 'uploads/' . $nome_novo;
+
             if (move_uploaded_file($arquivo['tmp_name'], $caminho)) {
+                // Remove foto antiga local (exceto imagem padrão).
+                if (!empty($animal['foto_animal']) &&
+                    $animal['foto_animal'] !== 'uploads/animal-default.jpg' &&
+                    is_file($animal['foto_animal'])) {
+                    @unlink($animal['foto_animal']);
+                }
                 $foto_animal = $caminho;
             }
+        } else {
+            $erro = "A imagem deve ser JPG, JPEG, PNG ou GIF e ter no máximo 5MB.";
         }
+    } elseif (isset($_FILES['foto']) && $_FILES['foto']['error'] !== UPLOAD_ERR_NO_FILE && $_FILES['foto']['error'] !== UPLOAD_ERR_OK) {
+        $erro = "Não foi possível carregar a imagem. Tente novamente.";
     }
 
-    $sql_update = "UPDATE animal SET nome_animal = ?, especie = ?, raca = ?, idade = ?, sexo = ?, porte = ?, descricao = ?, localidade = ?, foto_animal = ? WHERE id_animal = ? AND id_utilizador = ?";
-    $stmt_update = $conn->prepare($sql_update);
-    $stmt_update->bind_param("ssssssssiii", $nome_animal, $especie, $raca, $idade, $sexo, $porte, $descricao, $localidade, $foto_animal, $id_animal, $user_id);
+    if (empty($erro)) {
+        $sql_update = "UPDATE animal SET nome_animal = ?, especie = ?, raca = ?, idade = ?, sexo = ?, porte = ?, descricao = ?, localidade = ?, foto_animal = ?, adotado = ? WHERE id_animal = ? AND id_utilizador = ?";
+        $stmt_update = $conn->prepare($sql_update);
+        $stmt_update->bind_param("sssssssssiii", $nome_animal, $especie, $raca, $idade, $sexo, $porte, $descricao, $localidade, $foto_animal, $adotado, $id_animal, $user_id);
 
-    if ($stmt_update->execute()) {
-        header("Location: meus-animais.php?sucesso=editado");
-        exit();
-    } else {
-        $erro = "Erro ao atualizar: " . $stmt_update->error;
+        if ($stmt_update->execute()) {
+            header("Location: meus-animais.php?sucesso=editado");
+            exit();
+        } else {
+            $erro = "Erro ao atualizar: " . $stmt_update->error;
+        }
+
+        $stmt_update->close();
     }
-
-    $stmt_update->close();
 }
 
 ?>
@@ -135,12 +151,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
 
                 <div class="grupo-input">
+                    <label>Estado de Adoção</label>
+                    <select name="adotado" style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px;">
+                        <option value="0" <?php echo ((int) $animal['adotado'] === 0) ? 'selected' : ''; ?>>Disponível</option>
+                        <option value="1" <?php echo ((int) $animal['adotado'] === 1) ? 'selected' : ''; ?>>Já adotado</option>
+                    </select>
+                </div>
+
+                <div class="grupo-input">
                     <label>Descrição</label>
                     <textarea name="descricao" rows="4"><?php echo htmlspecialchars($animal['descricao']); ?></textarea>
                 </div>
 
                 <div class="grupo-input">
-                    <label>Foto do Animal (opcional)</label>
+                    <label>Foto atual</label>
+                    <div style="margin-bottom: 10px;">
+                        <img src="<?php echo htmlspecialchars($animal['foto_animal'] ?: 'uploads/animal-default.jpg'); ?>"
+                             alt="Foto atual do animal"
+                             style="width: 140px; height: 140px; object-fit: cover; border-radius: 10px; border: 1px solid #ddd;">
+                    </div>
+                    <label>Mudar foto (opcional)</label>
                     <input type="file" name="foto" accept="image/*">
                 </div>
 

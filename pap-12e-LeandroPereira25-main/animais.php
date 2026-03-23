@@ -3,25 +3,18 @@ require_once 'ligaDB.php';
 
 // Filtros
 $filtro_especie = isset($_GET['especie']) ? $_GET['especie'] : '';
-$filtro_adotado = isset($_GET['adotado']) ? $_GET['adotado'] : '';
 
 // Query para buscar animais
 $sql = "SELECT a.*, u.nome as nome_dono, u.email as email_dono 
         FROM animal a 
         JOIN utilizador u ON a.id_utilizador = u.id_utilizador 
-        WHERE 1=1";
+    WHERE a.adotado = 0";
 
 if ($filtro_especie) {
     $sql .= " AND a.especie = '" . $conn->real_escape_string($filtro_especie) . "'";
 }
 
-if ($filtro_adotado === '0') {
-    $sql .= " AND a.adotado = 0";
-} elseif ($filtro_adotado === '1') {
-    $sql .= " AND a.adotado = 1";
-}
-
-$sql .= " ORDER BY a.adotado ASC, a.data_criacao DESC";
+$sql .= " ORDER BY a.data_criacao DESC";
 
 $resultado = $conn->query($sql);
 ?>
@@ -41,7 +34,7 @@ $resultado = $conn->query($sql);
 <div class="animais-container">
     <!-- Header -->
     <div class="animais-header">
-        <h1>🐾 Animais para Adoção</h1>
+        <h1>🐾 Animais Disponíveis para Adoção</h1>
         <?php if(isset($_SESSION['logado'])): ?>
             <a href="adicionar-animal.php" class="btn-adicionar">+ Adicionar Animal</a>
         <?php else: ?>
@@ -57,12 +50,6 @@ $resultado = $conn->query($sql);
             <option value="Cão" <?php echo $filtro_especie == 'Cão' ? 'selected' : ''; ?>>Cães</option>
             <option value="Gato" <?php echo $filtro_especie == 'Gato' ? 'selected' : ''; ?>>Gatos</option>
             <option value="Outro" <?php echo $filtro_especie == 'Outro' ? 'selected' : ''; ?>>Outros</option>
-        </select>
-        <label>Status:</label>
-        <select name="adotado" onchange="this.form.submit()">
-            <option value="">Todos</option>
-            <option value="0" <?php echo $filtro_adotado === '0' ? 'selected' : ''; ?>>Disponíveis</option>
-            <option value="1" <?php echo $filtro_adotado === '1' ? 'selected' : ''; ?>>Adotados</option>
         </select>
         <a href="animais.php" style="color: #4CAF50; text-decoration: none; font-weight: 600;">Limpar Filtros</a>
     </form>
@@ -101,6 +88,10 @@ $resultado = $conn->query($sql);
                         <p class="info-dono">Por: <?php echo htmlspecialchars($animal['nome_dono']); ?></p>
                         <div class="acoes-animal">
                             <button onclick="verDetalhes(<?php echo $animal['id_animal']; ?>)" class="btn-acao btn-ver">Ver Mais</button>
+                            <?php if(isset($_SESSION['logado'])): ?>
+                                <button onclick="adicionarFavorito(<?php echo $animal['id_animal']; ?>)" class="btn-acao" style="background: #FF6B6B; color: white;">❤️</button>
+                                <button onclick="candidatar(<?php echo $animal['id_animal']; ?>)" class="btn-acao" style="background: #4ECDC4; color: white;">Candidatar</button>
+                            <?php endif; ?>
                             <?php if(isset($_SESSION['logado']) && $_SESSION['user_id'] == $animal['id_utilizador']): ?>
                                 <button onclick="editarAnimal(<?php echo $animal['id_animal']; ?>)" class="btn-acao btn-editar">Editar</button>
                                 <?php if(!$animal['adotado']): ?>
@@ -116,7 +107,7 @@ $resultado = $conn->query($sql);
     <?php else: ?>
         <div class="sem-animais">
             <h2>😢 Nenhum animal encontrado</h2>
-            <p>Não há animais com os filtros selecionados no momento.</p>
+            <p>Não há animais disponíveis com os filtros selecionados no momento.</p>
             <?php if(isset($_SESSION['logado'])): ?>
                 <a href="adicionar-animal.php" class="btn-adicionar">Adicionar o Primeiro Animal</a>
             <?php endif; ?>
@@ -143,6 +134,14 @@ $resultado = $conn->query($sql);
         if(confirm('Tem certeza que deseja remover este animal? Esta ação não pode ser desfeita.')) {
             window.location.href = 'remover-animal.php?id=' + id;
         }
+    }
+
+    function adicionarFavorito(id) {
+        window.location.href = 'adicionar-favorito.php?id=' + id;
+    }
+
+    function candidatar(id) {
+        window.location.href = 'formulario-candidatura.php?id=' + id;
     }
 </script>
 

@@ -198,9 +198,10 @@
             display: flex;
             gap: 10px;
             flex: 1;
+            align-items: center;
         }
 
-        .chat-input-group input {
+        .chat-input-group input[type="text"] {
             flex: 1;
             padding: 12px 16px;
             border: 1px solid #ddd;
@@ -210,10 +211,52 @@
             transition: all 0.3s ease;
         }
 
-        .chat-input-group input:focus {
+        .chat-input-group input[type="text"]:focus {
             outline: none;
             border-color: #66BB6A;
             box-shadow: 0 0 0 3px rgba(102, 187, 106, 0.1);
+        }
+
+        .file-upload-input {
+            display: none;
+        }
+
+        .file-upload-btn {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            border: 1px solid #d9d9d9;
+            background: #f7f7f7;
+            color: #2D5016;
+            font-size: 18px;
+            line-height: 1;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            flex-shrink: 0;
+        }
+
+        .file-upload-btn:hover {
+            background: #eaf5ea;
+            border-color: #66BB6A;
+            transform: translateY(-1px);
+        }
+
+        .file-upload-btn.has-file {
+            background: #66BB6A;
+            color: white;
+            border-color: #66BB6A;
+        }
+
+        .file-upload-name {
+            font-size: 12px;
+            color: #666;
+            max-width: 110px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .btn-enviar-msg {
@@ -349,6 +392,15 @@
         $conversas_unicas = [];
         $id_selecionado = isset($_GET['com']) ? intval($_GET['com']) : null;
 
+        // Compatibilidade com bases de dados que ainda não têm a coluna anexo.
+        $coluna_anexo_ok = false;
+        $check_anexo = $conn->query("SHOW COLUMNS FROM mensagem LIKE 'anexo'");
+        if ($check_anexo && $check_anexo->num_rows > 0) {
+            $coluna_anexo_ok = true;
+        }
+
+        $campo_anexo = $coluna_anexo_ok ? "m.anexo" : "NULL AS anexo";
+
         // Buscar todas as conversas do utilizador
         $sql = "SELECT DISTINCT 
                     CASE 
@@ -356,7 +408,7 @@
                         ELSE m.id_remetente
                     END as outro_id,
                     u.nome, u.foto_perfil,
-                    m.mensagem, m.anexo, m.data_envio
+                    m.mensagem, $campo_anexo, m.data_envio
                 FROM mensagem m
                 JOIN utilizador u ON (
                     (m.id_remetente = ? AND u.id_utilizador = m.id_destinatario) OR
@@ -404,7 +456,13 @@
                                  alt="<?php echo htmlspecialchars($conversa['nome']); ?>" 
                                  class="conversa-foto">
                             <span class="conversa-nome"><?php echo htmlspecialchars($conversa['nome']); ?></span>
-                            <div class="conversa-preview"><?php echo htmlspecialchars(substr($conversa['mensagem'], 0, 40)); ?>...</div>
+                            <?php
+                                $preview_msg = trim((string) ($conversa['mensagem'] ?? ''));
+                                if ($preview_msg === '' && !empty($conversa['anexo'])) {
+                                    $preview_msg = 'Imagem enviada';
+                                }
+                            ?>
+                            <div class="conversa-preview"><?php echo htmlspecialchars(substr($preview_msg, 0, 40)); ?>...</div>
                             <div class="conversa-data"><?php echo date('d/m H:i', strtotime($conversa['data_envio'])); ?></div>
                         </div>
                     </a>
@@ -428,7 +486,7 @@
 
                 // Buscar todas as mensagens da conversa
                 if ($user_data) {
-                    $sql_msgs = "SELECT m.id_mensagem, m.id_remetente, m.id_destinatario, m.mensagem, m.anexo, m.data_envio, u.nome, u.foto_perfil 
+                          $sql_msgs = "SELECT m.id_mensagem, m.id_remetente, m.id_destinatario, m.mensagem, $campo_anexo, m.data_envio, u.nome, u.foto_perfil 
                                  FROM mensagem m
                                  JOIN utilizador u ON m.id_remetente = u.id_utilizador
                                  WHERE (m.id_remetente = ? AND m.id_destinatario = ?) 
@@ -467,10 +525,15 @@
                                 <div>
                                     <div class="mensagem-conteudo"><?php echo nl2br(htmlspecialchars($msg['mensagem'])); ?></div>
 
-                                    <?php if (!empty($msg['anexo']) && file_exists($msg['anexo'])): ?>
+                                    <?php
+                                        $anexo = trim((string) ($msg['anexo'] ?? ''));
+                                        $anexo_local = __DIR__ . DIRECTORY_SEPARATOR . ltrim(str_replace(['/', '\\'], DIRECTORY_SEPARATOR, $anexo), DIRECTORY_SEPARATOR);
+                                        $anexo_disponivel = $anexo !== '' && (filter_var($anexo, FILTER_VALIDATE_URL) || is_file($anexo_local));
+                                    ?>
+                                    <?php if ($anexo_disponivel): ?>
                                         <div style="margin-top: 8px;">
-                                            <a href="<?php echo htmlspecialchars($msg['anexo']); ?>" target="_blank" style="display: inline-block; max-width: 240px;">
-                                                <img src="<?php echo htmlspecialchars($msg['anexo']); ?>" alt="Anexo" style="max-width: 100%; border-radius: 10px; border: 1px solid #ccc;">
+                                            <a href="<?php echo htmlspecialchars($anexo); ?>" target="_blank" style="display: inline-block; max-width: 240px;">
+                                                <img src="<?php echo htmlspecialchars($anexo); ?>" alt="Anexo" style="max-width: 100%; border-radius: 10px; border: 1px solid #ccc;">
                                             </a>
                                         </div>
                                     <?php endif; ?>
@@ -491,8 +554,10 @@
                 <div class="chat-footer">
                     <form method="POST" action="enviar-mensagem.php" class="chat-input-group" style="display: flex; gap: 10px; width: 100%;" enctype="multipart/form-data">
                         <input type="hidden" name="para_id" value="<?php echo $id_selecionado; ?>">
-                        <input type="text" name="conteudo" placeholder="Escreva a sua mensagem..." required style="flex: 1;">
-                        <input type="file" name="anexo" accept="image/*" style="padding: 0 5px; border-radius: 8px; border: 1px solid #ddd;">
+                        <input type="text" name="conteudo" placeholder="Escreva a sua mensagem..." style="flex: 1;">
+                        <label for="anexo" class="file-upload-btn" title="Anexar imagem">&#128206;</label>
+                        <input id="anexo" type="file" name="anexo" accept="image/*" class="file-upload-input">
+                        <span id="file-upload-name" class="file-upload-name"></span>
                         <button type="submit" class="btn-enviar-msg">Enviar</button>
                     </form>
                 </div>
@@ -551,6 +616,23 @@
         const chatMessages = document.getElementById('chat-messages');
         if (chatMessages) {
             chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        // Feedback visual ao escolher anexo
+        const anexoInput = document.getElementById('anexo');
+        const anexoNome = document.getElementById('file-upload-name');
+        const anexoBtn = document.querySelector('.file-upload-btn');
+
+        if (anexoInput && anexoNome && anexoBtn) {
+            anexoInput.addEventListener('change', function () {
+                if (this.files && this.files.length > 0) {
+                    anexoNome.textContent = this.files[0].name;
+                    anexoBtn.classList.add('has-file');
+                } else {
+                    anexoNome.textContent = '';
+                    anexoBtn.classList.remove('has-file');
+                }
+            });
         }
     </script>
 </body>

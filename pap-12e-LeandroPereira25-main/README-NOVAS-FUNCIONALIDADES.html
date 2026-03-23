@@ -1,0 +1,40 @@
+<?php
+require_once 'ligaDB.php';
+
+echo "<h2>Resumo das Funcionalidades Implementadas:</h2>";
+
+echo "<h3>✅ 1. Sistema de Favoritos</h3>";
+echo "<ul>";
+echo "<li>Página: <strong>meus-favoritos.php</strong> - Ver animais adicionados aos favoritos</li>";
+echo "<li>Backend: <strong>adicionar-favorito.php</strong> e <strong>remover-favorito.php</strong></li>";
+echo "<li>Menu: Link 'Favoritos' adicionado para utilizadores logados</li>";
+echo "</ul>";
+
+echo "<h3>✅ 3. Formulário de Candidatura para Adoção</h3>";
+echo "<ul>";
+echo "<li>Página: <strong>formulario-candidatura.php</strong> - Formulário estruturado</li>";
+echo "<li>Backend: <strong>salvar-candidatura.php</strong> - Guarda candidatura na BD</li>";
+echo "<li>Campos: Situação habitacional, experiência, motivo, composição familiar</li>";
+echo "</ul>";
+
+echo "<h3>✅ 8. Estatísticas Melhoradas</h3>";
+echo "<ul>";
+echo "<li>Homepage (index.php): 4 estatísticas - Total adotados, Disponíveis, Candidaturas ativas</li>";
+echo "<li>Valores dinâmicos vindo da base de dados</li>";
+echo "</ul>";
+
+echo "<h3>✅ 9. Sistema de Avaliações</h3>";
+echo "<ul>";
+echo "<li>Backend: <strong>salvar-avaliacao.php</strong> - Guardar classificação 1-5 e comentários</li>";
+echo "<li>Tabela: avaliacoes (classificação, comentário, utilizador, animal)</li>";
+echo "</ul>";
+
+echo "<hr>";
+echo "<h3>Próximos Passos:</h3>";
+echo "<ol>";
+echo "<li>Executar <strong>setup-novas-funcionalidades.php</strong> para criar as tabelas</li>";
+echo "<li>Adicionar botões 'Favoritar' e 'Candidatar-se' nas cards de animais</li>";
+echo "<li>Criar página de gestão de candidaturas para proprietários</li>";
+echo "<li>Mostrar avaliações nos detalhes dos animais</li>";
+echo "</ol>";
+?>

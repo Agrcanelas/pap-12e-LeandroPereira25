@@ -16,12 +16,6 @@ $id_remetente = $_SESSION['user_id'];
 $id_destinatario = intval($_POST['para_id']);
 $msg_texto = trim($_POST['conteudo']);
 
-// Validações básicas
-if (empty($msg_texto)) {
-    header('Location: mensagens.php?com=' . $id_destinatario . '&erro=vazio');
-    exit();
-}
-
 if (strlen($msg_texto) > 1000) {
     header('Location: mensagens.php?com=' . $id_destinatario . '&erro=longo');
     exit();
@@ -56,11 +50,22 @@ if (isset($_FILES['anexo']) && $_FILES['anexo']['error'] === UPLOAD_ERR_OK) {
     }
 }
 
+// Permitir envio com texto, com imagem, ou ambos.
+if (empty($msg_texto) && empty($anexo_caminho)) {
+    header('Location: mensagens.php?com=' . $id_destinatario . '&erro=vazio');
+    exit();
+}
+
 // Verificar se coluna anexo existe (compatibilidade com base antiga)
 $coluna_anexo_ok = false;
 $check_anexo = $conn->query("SHOW COLUMNS FROM mensagem LIKE 'anexo'");
 if ($check_anexo && $check_anexo->num_rows > 0) {
     $coluna_anexo_ok = true;
+} else {
+    // Tentar atualizar automaticamente a tabela para suportar anexos.
+    if ($conn->query("ALTER TABLE mensagem ADD COLUMN anexo VARCHAR(255) NULL AFTER mensagem")) {
+        $coluna_anexo_ok = true;
+    }
 }
 
 if ($coluna_anexo_ok) {
